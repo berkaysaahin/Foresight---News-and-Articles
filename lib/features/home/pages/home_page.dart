@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:foresight_news_and_articles/features/home/widgets/home_heading.dart";
+import "package:foresight_news_and_articles/features/home/widgets/home_slider.dart";
 import "package:foresight_news_and_articles/features/home/widgets/home_top_buttons.dart";
 
 class HomePage extends StatelessWidget {
@@ -19,6 +20,7 @@ class HomePage extends StatelessWidget {
                 onPressed: () {},
               ),
             ),
+            HomeSlider(),
             Center(
               child: Text('Home'),
             ),

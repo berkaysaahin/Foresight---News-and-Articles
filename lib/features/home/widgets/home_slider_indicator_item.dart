@@ -23,7 +23,7 @@ class HomeSliderIndicatorItem extends StatelessWidget {
       width: isActive ? activeWidth : width,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(width),
-        color: isActive ? Theme.of(context).primaryColor : AppColors.osloGray,
+        color: isActive ? Theme.of(context).primaryColor : AppColors.porcelain,
       ),
     );
   }

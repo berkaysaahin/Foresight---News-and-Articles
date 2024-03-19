@@ -45,11 +45,14 @@ class _MainPageState extends State<MainPage> {
           ProfilePage(),
         ],
       ),
-      bottomNavigationBar: BottomNavBar(
-        currentIndex: _pageIndex,
-        onTap: (value) {
-          _pageController.jumpToPage(value);
-        },
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.only(bottom: 15),
+        child: BottomNavBar(
+          currentIndex: _pageIndex,
+          onTap: (value) {
+            _pageController.jumpToPage(value);
+          },
+        ),
       ),
     );
   }

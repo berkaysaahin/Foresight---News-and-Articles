@@ -13,6 +13,7 @@ class App extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: AppColors.azureRadianceSwatch,
         primaryColor: AppColors.azureRadiance,
+        scaffoldBackgroundColor: AppColors.white,
       ),
       home: const MainPage(),
     );

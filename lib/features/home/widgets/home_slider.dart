@@ -18,9 +18,9 @@ class _HomeSliderState extends State<HomeSlider> {
   int _pageIndex = 0;
 
   final _displayIndicatorsCount = 5.0;
-  final _indicatorWidth = 8.0;
+  final _indicatorWidth = 10.0;
   final _activeIndicatorWidth = 32.0;
-  final _indicatorMargin = const EdgeInsets.symmetric(horizontal: 1);
+  final _indicatorMargin = const EdgeInsets.symmetric(horizontal: 2);
 
   @override
   void initState() {
@@ -47,7 +47,7 @@ class _HomeSliderState extends State<HomeSlider> {
     final activeIndicatorTotalWidth =
         _activeIndicatorWidth + _indicatorMargin.left + _indicatorMargin.right;
     return activeIndicatorTotalWidth +
-        (_displayIndicatorsCount - 1) * indicatorTotalWidth;
+        ((_displayIndicatorsCount - 1) * indicatorTotalWidth);
   }
 
   double _calculateIndicatorOffset() {
@@ -60,48 +60,58 @@ class _HomeSliderState extends State<HomeSlider> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(
-            height: 235,
-            child: PageView.builder(
-              onPageChanged: (value) {
-                setState(() {
-                  _pageIndex = value % newsrItems.length;
-                });
-              },
-              controller: _pageController,
-              itemBuilder: (context, index) {
-                final i = index % newsrItems.length;
-                return HomeSliderItem(
-                  isActive: _pageIndex == i,
-                  imageAssetPath: newsrItems[i]['imageAssetPath']!,
-                  category: newsrItems[i]['category']!,
-                  title: newsrItems[i]['title']!,
-                  author: newsrItems[i]['author']!,
-                  date: DateTime.parse(newsrItems[i]['date']!),
-                );
-              },
-            )),
-        const SizedBox(
-          height: 10,
-        ),
-        SizedBox(
-          width: _indicatorsVisibleWidth,
-          height: _indicatorWidth,
-          child: ListView.builder(
-              controller: _scrollController,
-              itemBuilder: (context, index) {
-                final i = index % newsrItems.length;
-                return HomeSliderIndicatorItem(
-                  isActive: _pageIndex == i,
-                  activeWidth: _activeIndicatorWidth,
-                  width: _indicatorWidth,
-                  margin: _indicatorMargin,
-                );
-              }),
-        )
-      ],
+    return SliverList(
+      delegate: SliverChildListDelegate(
+        [
+          SizedBox(
+              height: 235,
+              child: PageView.builder(
+                onPageChanged: (value) {
+                  setState(() {
+                    _pageIndex = value % newsrItems.length;
+                  });
+                  _scrollController.animateTo(
+                    _calculateIndicatorOffset(),
+                    duration: const Duration(milliseconds: 200),
+                    curve: Curves.easeIn,
+                  );
+                },
+                controller: _pageController,
+                itemBuilder: (context, index) {
+                  final i = index % newsrItems.length;
+                  return HomeSliderItem(
+                    isActive: _pageIndex == i,
+                    imageAssetPath: newsrItems[i]['imageAssetPath']!,
+                    category: newsrItems[i]['category']!,
+                    title: newsrItems[i]['title']!,
+                    author: newsrItems[i]['author']!,
+                    date: DateTime.parse(newsrItems[i]['date']!),
+                  );
+                },
+              )),
+          const SizedBox(
+            height: 10,
+          ),
+          Align(
+            child: SizedBox(
+              width: _indicatorsVisibleWidth,
+              height: _indicatorWidth,
+              child: ListView.builder(
+                  controller: _scrollController,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) {
+                    final i = index % newsrItems.length;
+                    return HomeSliderIndicatorItem(
+                      isActive: index == _pageIndex + 999,
+                      activeWidth: _activeIndicatorWidth,
+                      width: _indicatorWidth,
+                      margin: _indicatorMargin,
+                    );
+                  }),
+            ),
+          )
+        ],
+      ),
     );
   }
 }

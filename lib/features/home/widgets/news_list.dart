@@ -13,6 +13,7 @@ class NewsList extends StatelessWidget {
           imageAssetPath: newsrItems[i]['imageAssetPath']!,
           category: newsrItems[i]['category']!,
           title: newsrItems[i]['title']!,
+          content: newsrItems[i]['content']!,
           author: newsrItems[i]['author']!,
           authorImageAssetPath: newsrItems[i]['authorImageAssetPath']!,
           date: DateTime.parse(newsrItems[i]['date']!),

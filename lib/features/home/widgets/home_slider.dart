@@ -106,7 +106,6 @@ class _HomeSliderState extends State<HomeSlider> {
                   scrollDirection: Axis.horizontal,
                   itemCount: newsrItems.length * 20,
                   itemBuilder: (context, index) {
-                    final i = index % newsrItems.length;
                     return HomeSliderIndicatorItem(
                       isActive: index == _pageIndex,
                       activeWidth: _activeIndicatorWidth,

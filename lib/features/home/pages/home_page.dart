@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:foresight_news_and_articles/features/home/pages/all_news_page.dart";
 import "package:foresight_news_and_articles/features/home/widgets/home_heading.dart";
 import "package:foresight_news_and_articles/features/home/widgets/home_slider.dart";
 import "package:foresight_news_and_articles/features/home/widgets/home_top_buttons.dart";
@@ -17,7 +18,7 @@ class HomePage extends StatelessWidget {
             HomeHeading(
               title: 'Breaking News',
               trailing: TextButton(
-                child: Text('View All'),
+                child: const Text('View All'),
                 onPressed: () {},
               ),
             ),
@@ -25,8 +26,15 @@ class HomePage extends StatelessWidget {
             HomeHeading(
               title: 'Recommendation',
               trailing: TextButton(
-                child: Text('View All'),
-                onPressed: () {},
+                child: const Text('View All'),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const AllNewsPage(),
+                    ),
+                  );
+                },
               ),
             ),
             const NewsList(),

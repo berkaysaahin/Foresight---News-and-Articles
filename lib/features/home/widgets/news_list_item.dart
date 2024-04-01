@@ -42,7 +42,7 @@ class NewsListItem extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(20),
@@ -62,16 +62,16 @@ class NewsListItem extends StatelessWidget {
                 children: [
                   Text(
                     category,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
                           color: AppColors.osloGray,
                         ),
                   ),
                   const SizedBox(
-                    height: 7,
+                    height: 4,
                   ),
                   Text(
                     title,
-                    style: Theme.of(context).textTheme.titleLarge,
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const SizedBox(
                     height: 7,

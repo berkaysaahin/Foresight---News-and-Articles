@@ -8,7 +8,7 @@ class HomeHeading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverPadding(
-      padding: const EdgeInsets.fromLTRB(20, 30, 20, 16),
+      padding: const EdgeInsets.fromLTRB(20, 1, 20, 15),
       sliver: SliverToBoxAdapter(
         child: Row(
           children: [

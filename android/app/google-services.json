@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "171807432948",
+    "project_id": "foresight-6c266",
+    "storage_bucket": "foresight-6c266.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:171807432948:android:a45c22b42eb1882e23bea1",
+        "android_client_info": {
+          "package_name": "com.perorincho.foresight_news_and_articles"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAfq_IfGI6Er-kR7NqnV3AxiOv8frg4On0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

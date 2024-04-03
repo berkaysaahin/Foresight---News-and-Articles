@@ -23,6 +23,3 @@ class NewsList extends StatelessWidget {
     );
   }
 }
-
-
-//1.20

@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:foresight_news_and_articles/core/app_rounded_button.dart';
 
 class SecondaryTopButtons extends StatelessWidget {
-  const SecondaryTopButtons({super.key});
+  final String pageTitle;
+  const SecondaryTopButtons({super.key, required this.pageTitle});
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +21,13 @@ class SecondaryTopButtons extends StatelessWidget {
               onTap: () {
                 Navigator.pop(context);
               },
+            ),
+            const SizedBox(
+              width: 17,
+            ),
+            Text(
+              pageTitle,
+              style: Theme.of(context).textTheme.titleLarge,
             ),
             const Spacer(),
             AppRoundedButton(

@@ -19,7 +19,14 @@ class HomePage extends StatelessWidget {
               title: 'Breaking News',
               trailing: TextButton(
                 child: const Text('View All'),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const AllNewsPage(),
+                    ),
+                  );
+                },
               ),
             ),
             const HomeSlider(),

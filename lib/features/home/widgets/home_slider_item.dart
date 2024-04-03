@@ -67,6 +67,13 @@ class HomeSliderItem extends StatelessWidget {
                       style: const TextStyle(color: AppColors.white),
                     ),
                     backgroundColor: Theme.of(context).primaryColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(20), // Customize border radius
+                      side: BorderSide(
+                          color: Theme.of(context).primaryColor,
+                          width: 1), // Add border
+                    ),
                   ),
                 ),
                 Container(
@@ -89,9 +96,10 @@ class HomeSliderItem extends StatelessWidget {
                     children: [
                       Text(
                         '$author · ${AppDateFormatters.mdY(date)}',
-                        style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                              color: AppColors.white,
-                            ),
+                        style:
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  color: AppColors.white,
+                                ),
                         maxLines: 1,
                       ),
                       const SizedBox(
@@ -99,7 +107,7 @@ class HomeSliderItem extends StatelessWidget {
                       ),
                       Text(
                         title,
-                        style: Theme.of(context).textTheme.headline6?.copyWith(
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
                               color: AppColors.white,
                             ),
                       ),

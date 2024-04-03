@@ -109,6 +109,13 @@ class SingleNewsItemHeaderDelegate extends SliverPersistentHeaderDelegate {
                               style: const TextStyle(color: AppColors.white),
                             ),
                             backgroundColor: Theme.of(context).primaryColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                  20), // Customize border radius
+                              side: BorderSide(
+                                  color: Theme.of(context).primaryColor,
+                                  width: 1), // Add border
+                            ),
                           )
                         : const SizedBox.shrink(),
                   ),
@@ -120,9 +127,10 @@ class SingleNewsItemHeaderDelegate extends SliverPersistentHeaderDelegate {
                     width: MediaQuery.of(context).size.width - 40,
                     child: Text(
                       title,
-                      style: Theme.of(context).textTheme.headline4?.copyWith(
-                            color: AppColors.white,
-                          ),
+                      style:
+                          Theme.of(context).textTheme.headlineMedium?.copyWith(
+                                color: AppColors.white,
+                              ),
                     ),
                   ),
                   AnimatedContainer(
@@ -136,7 +144,7 @@ class SingleNewsItemHeaderDelegate extends SliverPersistentHeaderDelegate {
                             AppDateFormatters.mdY(date),
                             style: Theme.of(context)
                                 .textTheme
-                                .subtitle1
+                                .titleMedium
                                 ?.copyWith(color: AppColors.white),
                           )
                         : const SizedBox.shrink(),
@@ -193,7 +201,7 @@ class SingleNewsItemHeaderDelegate extends SliverPersistentHeaderDelegate {
                             : CrossFadeState.showSecond,
                         secondChild: Text(
                           title,
-                          style: Theme.of(context).textTheme.headline6,
+                          style: Theme.of(context).textTheme.titleLarge,
                         ),
                         firstChild: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
@@ -235,5 +243,3 @@ class SingleNewsItemHeaderDelegate extends SliverPersistentHeaderDelegate {
   OverScrollHeaderStretchConfiguration get stretchConfiguration =>
       OverScrollHeaderStretchConfiguration();
 }
-
-//5.30

@@ -36,13 +36,13 @@ class BottomNavBar extends StatelessWidget {
                 },
               ),
               BottomNavBarItem(
-                text: "Browse",
+                text: "Articles",
                 isActive: currentIndex == 1,
                 onTap: () {
                   onTap(1);
                 },
-                activeIconData: Icons.language,
-                iconData: Icons.language_outlined,
+                activeIconData: Icons.article,
+                iconData: Icons.article_outlined,
               ),
               BottomNavBarItem(
                 text: "Bookmarks",

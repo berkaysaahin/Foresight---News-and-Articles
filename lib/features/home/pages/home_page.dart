@@ -4,6 +4,7 @@ import "package:foresight_news_and_articles/features/home/widgets/home_heading.d
 import "package:foresight_news_and_articles/features/home/widgets/home_slider.dart";
 import "package:foresight_news_and_articles/features/home/widgets/home_top_buttons.dart";
 import "package:foresight_news_and_articles/features/home/widgets/news_list.dart";
+import "package:foresight_news_and_articles/features/home/widgets/side_bar.dart";
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -11,6 +12,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: const SideBar(),
       body: SafeArea(
         child: CustomScrollView(
           slivers: [

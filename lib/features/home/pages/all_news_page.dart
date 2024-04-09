@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foresight_news_and_articles/features/home/widgets/news_list.dart';
+import 'package:foresight_news_and_articles/features/home/widgets/secondary_top_buttons.dart';
 
 class AllNewsPage extends StatelessWidget {
   const AllNewsPage({super.key});
@@ -10,9 +11,9 @@ class AllNewsPage extends StatelessWidget {
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
-            // SecondaryTopButtons(
-            //   pageTitle: 'All News',
-            //  ),
+            SecondaryTopButtons(
+              pageTitle: 'All News',
+            ),
             NewsList(),
           ],
         ),

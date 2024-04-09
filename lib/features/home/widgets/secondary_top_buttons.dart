@@ -32,7 +32,9 @@ class SecondaryTopButtons extends StatelessWidget {
             const Spacer(),
             AppRoundedButton(
               iconData: Icons.menu,
-              onTap: () {},
+              onTap: () {
+                Scaffold.of(context).openDrawer();
+              },
             ),
           ],
         ),

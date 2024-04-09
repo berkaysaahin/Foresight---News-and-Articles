@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:foresight_news_and_articles/core/rectangle_rounded_button.dart";
 import "package:foresight_news_and_articles/features/home/widgets/secondary_top_buttons.dart";
+import "package:foresight_news_and_articles/features/home/widgets/side_bar.dart";
 import "package:foresight_news_and_articles/features/profile/pages/signup_page.dart";
 import "package:foresight_news_and_articles/theme/app_colors.dart";
 
@@ -30,6 +31,7 @@ class _SignInPageState extends State<SignInPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: const SideBar(),
       body: SafeArea(
         child: CustomScrollView(
           slivers: [

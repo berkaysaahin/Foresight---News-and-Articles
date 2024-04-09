@@ -16,7 +16,9 @@ class HomeTopButtons extends StatelessWidget {
           children: [
             AppRoundedButton(
               iconData: Icons.menu,
-              onTap: () {},
+              onTap: () {
+                Scaffold.of(context).openDrawer();
+              },
             ),
             const Spacer(),
             AppRoundedButton(

@@ -38,10 +38,10 @@ class _MainPageState extends State<MainPage> {
             _pageIndex = value;
           });
         },
-        children: const [
-          HomePage(),
-          BrowsePage(),
-          BookMarks(),
+        children: [
+          const HomePage(),
+          const BrowsePage(),
+          const BookMarks(),
           ProfilePage(),
         ],
       ),

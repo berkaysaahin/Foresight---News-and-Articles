@@ -1,3 +1,5 @@
 {
-    "cmake.sourceDirectory": "C:/Users/Berkay/Documents/Visual Studio Code/foresight_news_and_articles/linux"
+    "cmake.sourceDirectory": "C:/Users/Berkay/Documents/Visual Studio Code Projects/foresight_news_and_articles/build/windows/x64/extracted/firebase_cpp_sdk_windows",
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "java.compile.nullAnalysis.mode": "disabled"
 }

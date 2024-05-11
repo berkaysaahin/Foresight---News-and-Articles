@@ -15,7 +15,7 @@ class SignInPage extends StatefulWidget {
 class _SignInPageState extends State<SignInPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String _name = ''; // Variable to store the entered name
-  String _email = ''; // Variable to store the entered email
+  final String _email = ''; // Variable to store the entered email
   String _password = '';
 
   void _submitForm() {

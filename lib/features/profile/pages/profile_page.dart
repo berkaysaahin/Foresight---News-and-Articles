@@ -102,7 +102,7 @@ class ProfilePage extends StatelessWidget {
                   const SizedBox(
                     height: 10,
                   ),
-                  ListTile(
+                  const ListTile(
                     title: Text(
                       "Name",
                       style: TextStyle(fontWeight: FontWeight.bold),
@@ -117,7 +117,7 @@ class ProfilePage extends StatelessWidget {
                     indent: 25,
                     endIndent: 25,
                   ),
-                  ListTile(
+                  const ListTile(
                     title: Text(
                       "Email",
                       style: TextStyle(fontWeight: FontWeight.bold),
@@ -132,7 +132,7 @@ class ProfilePage extends StatelessWidget {
                     indent: 25,
                     endIndent: 25,
                   ),
-                  ListTile(
+                  const ListTile(
                     title: Text(
                       "Password",
                       style: TextStyle(fontWeight: FontWeight.bold),
@@ -147,7 +147,7 @@ class ProfilePage extends StatelessWidget {
                     indent: 25,
                     endIndent: 25,
                   ),
-                  ListTile(
+                  const ListTile(
                     title: Text(
                       "Country/Region",
                       style: TextStyle(fontWeight: FontWeight.bold),

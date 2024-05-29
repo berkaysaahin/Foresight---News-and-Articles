@@ -19,7 +19,9 @@ class SecondaryTopButtons extends StatelessWidget {
             AppRoundedButton(
               iconData: CupertinoIcons.left_chevron,
               onTap: () {
-                Navigator.pop(context);
+                if (Navigator.of(context).canPop()) {
+                  Navigator.pop(context);
+                }
               },
             ),
             const SizedBox(

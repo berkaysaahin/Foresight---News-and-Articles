@@ -5,6 +5,7 @@ import "package:foresight_news_and_articles/features/home/widgets/home_slider.da
 import "package:foresight_news_and_articles/features/home/widgets/home_top_buttons.dart";
 import "package:foresight_news_and_articles/features/home/widgets/news_list.dart";
 import "package:foresight_news_and_articles/features/home/widgets/side_bar.dart";
+import "package:foresight_news_and_articles/theme/app_colors.dart";
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -20,7 +21,10 @@ class HomePage extends StatelessWidget {
             HomeHeading(
               title: 'Breaking News',
               trailing: TextButton(
-                child: const Text('View All'),
+                child: const Text(
+                  'View All',
+                  style: TextStyle(color: AppColors.azureRadiance),
+                ),
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -35,7 +39,10 @@ class HomePage extends StatelessWidget {
             HomeHeading(
               title: 'Recommendation',
               trailing: TextButton(
-                child: const Text('View All'),
+                child: const Text(
+                  'View All',
+                  style: TextStyle(color: AppColors.azureRadiance),
+                ),
                 onPressed: () {
                   Navigator.push(
                     context,

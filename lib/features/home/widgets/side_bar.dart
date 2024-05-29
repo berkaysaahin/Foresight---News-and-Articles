@@ -13,63 +13,91 @@ class SideBar extends StatelessWidget {
         children: [
           UserAccountsDrawerHeader(
             accountName: const Text(
-              "Kasane Teto",
+              "Berkay Şahin",
               style: TextStyle(color: AppColors.black),
             ),
             accountEmail: const Text(
-              "kasaneteto@vmail.com",
-              style: TextStyle(color: AppColors.black),
+              "berkaaysaahin@gmail.com",
+              style: TextStyle(color: AppColors.black08),
             ),
             currentAccountPicture: CircleAvatar(
+              backgroundColor: AppColors.athenasGray,
               child: ClipOval(
                 child: Image.asset(
                   authorImageAssetPath,
-                  width: 85,
-                  height: 85,
+                  width: 65,
+                  height: 65,
                   fit: BoxFit.cover,
                 ),
               ),
             ),
             decoration: const BoxDecoration(
               color: AppColors.athenasGray,
-              border:
-                  Border(bottom: BorderSide(color: AppColors.azureRadiance)),
+              border: Border(
+                  bottom: BorderSide(color: Colors.transparent, width: 0.0)),
             ),
           ),
           ListTile(
-            title: const Text("All"),
+            title: Text(
+              "All",
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
             onTap: () {},
-            leading: const Icon(Icons.library_books_outlined),
+            leading: const Icon(
+              Icons.library_books,
+              color: Colors.black,
+            ),
           ),
           ListTile(
-            title: const Text("News"),
+            title: Text(
+              "News",
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
             onTap: () {},
-            leading: const Icon(Icons.newspaper_outlined),
+            leading: const Icon(
+              Icons.newspaper,
+              color: Colors.black,
+            ),
           ),
           ListTile(
             title: const Text("Articles"),
             onTap: () {},
-            leading: const Icon(Icons.article_outlined),
+            leading: const Icon(
+              Icons.article,
+              color: Colors.black,
+            ),
           ),
           ListTile(
             title: const Text("Technology"),
             onTap: () {},
-            leading: const Icon(Icons.phone_android_outlined),
+            leading: const Icon(
+              Icons.phone_android,
+              color: Colors.black,
+            ),
           ),
           ListTile(
             title: const Text("Science"),
             onTap: () {},
-            leading: const Icon(Icons.science_outlined),
+            leading: const Icon(
+              Icons.science,
+              color: Colors.black,
+            ),
           ),
           ListTile(
             title: const Text("Sports"),
             onTap: () {},
-            leading: const Icon(Icons.sports_outlined),
+            leading: const Icon(
+              Icons.sports_volleyball,
+              color: Colors.black,
+            ),
           ),
           ListTile(
             title: const Text("Favorites"),
             onTap: () {},
-            leading: const Icon(Icons.favorite),
+            leading: const Icon(
+              Icons.favorite,
+              color: Colors.black,
+            ),
           ),
         ],
       ),

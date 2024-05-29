@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:foresight_news_and_articles/core/bottom_nav_bar.dart';
 import 'package:foresight_news_and_articles/features/bookmarks/pages/bookmarks_page.dart';
-import 'package:foresight_news_and_articles/features/browse/pages/browse_page.dart';
 import 'package:foresight_news_and_articles/features/home/pages/home_page.dart';
+import 'package:foresight_news_and_articles/features/home/pages/new_article_page.dart';
 import 'package:foresight_news_and_articles/features/profile/pages/profile_page.dart';
 
 class MainPage extends StatefulWidget {
@@ -40,7 +40,7 @@ class _MainPageState extends State<MainPage> {
         },
         children: [
           const HomePage(),
-          const BrowsePage(),
+          NewArticlePage(),
           const BookMarks(),
           ProfilePage(),
         ],

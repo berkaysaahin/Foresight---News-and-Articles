@@ -1,15 +1,44 @@
+import "dart:io";
+
+import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/material.dart";
 import "package:font_awesome_flutter/font_awesome_flutter.dart";
 import "package:foresight_news_and_articles/core/app_rounded_button.dart";
 import "package:foresight_news_and_articles/core/rectangle_rounded_button.dart";
+import "package:foresight_news_and_articles/core/utils/app_date_formatters.dart";
 import "package:foresight_news_and_articles/dummy.dart";
 import "package:foresight_news_and_articles/features/home/widgets/side_bar.dart";
 import "package:foresight_news_and_articles/theme/app_colors.dart";
+import "package:image_picker/image_picker.dart";
 
-class NewArticlePage extends StatelessWidget {
+class NewArticlePage extends StatefulWidget {
   NewArticlePage({Key? key}) : super(key: key);
 
+  @override
+  State<NewArticlePage> createState() => _NewArticlePageState();
+}
+
+class _NewArticlePageState extends State<NewArticlePage> {
+  final titleController = TextEditingController();
+
+  final contentController = TextEditingController();
+
+  final categoryController = TextEditingController();
+
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  File? _selectedImage;
+
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        _selectedImage = File(pickedFile.path);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +102,56 @@ class NewArticlePage extends StatelessWidget {
                     ),
                     const Spacer(),
                     RectangleRoundedButton(
-                      onTap: () {},
+                      onTap: () {
+                        String formattedDate =
+                            AppDateFormatters.mdY(DateTime.now());
+                        CollectionReference collRef =
+                            FirebaseFirestore.instance.collection("news");
+                        String title = titleController.text.trim();
+                        String content = contentController.text.trim();
+                        String category = categoryController.text.trim();
+
+                        if (title.isEmpty ||
+                            content.isEmpty ||
+                            category.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('All fields are required.'),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        }
+                        if (title.isNotEmpty &&
+                            content.isNotEmpty &&
+                            category.isNotEmpty) {
+                          collRef.add({
+                            "title": title,
+                            "content": content,
+                            "category": category,
+                            "date": formattedDate,
+                            "imageAsset": _selectedImage,
+                          }).then((_) {
+                            titleController.clear();
+                            contentController.clear();
+                            categoryController.clear();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content:
+                                    Text('Article submitted successfully!'),
+                                backgroundColor: Colors.green,
+                              ),
+                            );
+                          }).catchError((error) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content:
+                                    Text('Failed to submit article: $error'),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                          });
+                        }
+                      },
                       buttonText: "Submit",
                       buttonColor: AppColors.athenasGray,
                     )
@@ -83,7 +161,7 @@ class NewArticlePage extends StatelessWidget {
             ),
             SliverToBoxAdapter(
               child: GestureDetector(
-                onTap: () {},
+                onTap: _pickImage,
                 child: Container(
                   color: AppColors.white,
                   child: Container(
@@ -116,6 +194,16 @@ class NewArticlePage extends StatelessWidget {
                                   color: AppColors.osloGray,
                                 ),
                           ),
+                          if (_selectedImage != null)
+                            Padding(
+                              padding: const EdgeInsets.only(left: 8),
+                              child: Image.file(
+                                _selectedImage!,
+                                height: 50,
+                                width: 50,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
                         ],
                       ),
                     ),
@@ -142,6 +230,7 @@ class NewArticlePage extends StatelessWidget {
                           height: 10,
                         ),
                         TextField(
+                          controller: titleController,
                           maxLines: 1,
                           minLines: 1,
                           decoration: InputDecoration(
@@ -161,6 +250,7 @@ class NewArticlePage extends StatelessWidget {
                           thickness: 3,
                         ),
                         TextField(
+                          controller: contentController,
                           minLines: 8,
                           maxLines: null,
                           decoration: InputDecoration(
@@ -181,6 +271,7 @@ class NewArticlePage extends StatelessWidget {
                               alignLabelWithHint: true),
                         ),
                         TextField(
+                          controller: categoryController,
                           maxLines: 1,
                           minLines: 1,
                           decoration: InputDecoration(

@@ -1,6 +1,8 @@
 import "package:flutter/material.dart";
 import "package:font_awesome_flutter/font_awesome_flutter.dart";
+import "package:foresight_news_and_articles/core/main_page.dart";
 import "package:foresight_news_and_articles/core/rectangle_rounded_button.dart";
+import "package:foresight_news_and_articles/core/services/authentication.dart";
 import "package:foresight_news_and_articles/features/home/widgets/form_field.dart";
 import "package:foresight_news_and_articles/features/home/widgets/secondary_top_buttons.dart";
 import "package:foresight_news_and_articles/features/home/widgets/side_bar.dart";
@@ -15,6 +17,8 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,19 +51,44 @@ class _SignInPageState extends State<SignInPage> {
                           const SizedBox(
                             height: 26,
                           ),
-                          const FormFieldSample(
+                          FormFieldSample(
+                            controller: _emailController,
                             hintText: "Email Address",
                             labelText: "Email Address",
                           ),
                           const SizedBox(
                             height: 16,
                           ),
-                          const FormFieldSample(
+                          FormFieldSample(
+                            controller: _passwordController,
                             hintText: "Password",
                             labelText: "Password",
                           ),
                           const SizedBox(
                             height: 16,
+                          ),
+                          RectangleRoundedButton(
+                            buttonIcon: FontAwesomeIcons.google,
+                            buttonColor: AppColors.azureRadiance,
+                            textColor: AppColors.white,
+                            onTap: () async {
+                              final message = await AuthService().login(
+                                email: _emailController.text,
+                                password: _passwordController.text,
+                              );
+                              if (message!.contains('Success')) {
+                                Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                    builder: (context) => const MainPage(),
+                                  ),
+                                );
+                              }
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(message),
+                                ),
+                              );
+                            },
                           ),
                           const Row(
                             children: [

@@ -1,3 +1,4 @@
+import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
 import "package:foresight_news_and_articles/core/app_rounded_button.dart";
@@ -7,9 +8,45 @@ import "package:foresight_news_and_articles/features/home/widgets/side_bar.dart"
 import "package:foresight_news_and_articles/features/profile/pages/signin_page.dart";
 import "package:foresight_news_and_articles/theme/app_colors.dart";
 
-class ProfilePage extends StatelessWidget {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+class ProfilePage extends StatefulWidget {
   ProfilePage({Key? key}) : super(key: key);
+
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  User? _user;
+
+  @override
+  void initState() {
+    super.initState();
+    _getUserInfo();
+  }
+
+  Future<void> _getUserInfo() async {
+    _user = _auth.currentUser;
+    if (_user == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        // Navigate to SignInPage if user is not logged in
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const SignInPage(),
+          ),
+        );
+      });
+    }
+  }
+
+  Future<void> _signOut() async {
+    await _auth.signOut();
+    setState(() {
+      _user = null;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,10 +73,19 @@ class ProfilePage extends StatelessWidget {
                         child: Stack(
                           children: [
                             CircleAvatar(
-                              backgroundImage: AssetImage(
-                                authorImageAssetPath,
-                              ),
+                              backgroundColor: AppColors.white,
                               radius: 55,
+                              child: _user?.photoURL != null
+                                  ? CircleAvatar(
+                                      radius: 55,
+                                      backgroundImage:
+                                          NetworkImage(_user!.photoURL!),
+                                    )
+                                  : const Icon(
+                                      Icons.person,
+                                      size: 55,
+                                      color: AppColors.porcelain,
+                                    ),
                             ),
                             const Positioned(
                               bottom: 1.0, // Adjust for desired position
@@ -101,30 +147,32 @@ class ProfilePage extends StatelessWidget {
                         const SizedBox(
                           height: 40,
                         ),
-                        const ListTile(
-                          title: Text(
+                        ListTile(
+                          title: const Text(
                             "Name",
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          subtitle: Text(
-                            "Berkay Şahin",
-                          ),
-                          trailing: Icon(Icons.edit, color: AppColors.osloGray),
+                          subtitle: _user != null
+                              ? Text(_user!.displayName ?? 'No name found')
+                              : const Text(''),
+                          trailing:
+                              const Icon(Icons.edit, color: AppColors.osloGray),
                         ),
                         const Divider(
                           height: 40,
                           color: AppColors.porcelain,
                           thickness: 3,
                         ),
-                        const ListTile(
-                          title: Text(
+                        ListTile(
+                          title: const Text(
                             "Email",
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          subtitle: Text(
-                            "berkaysaahin@gmail.com",
-                          ),
-                          trailing: Icon(Icons.edit, color: AppColors.osloGray),
+                          subtitle: _user != null
+                              ? Text(_user!.email ?? 'No email found')
+                              : const Text(''),
+                          trailing:
+                              const Icon(Icons.edit, color: AppColors.osloGray),
                         ),
                         const Divider(
                           height: 40,
@@ -137,7 +185,7 @@ class ProfilePage extends StatelessWidget {
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           subtitle: Text(
-                            "************",
+                            "",
                           ),
                           trailing: Icon(Icons.edit, color: AppColors.osloGray),
                         ),
@@ -152,7 +200,7 @@ class ProfilePage extends StatelessWidget {
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           subtitle: Text(
-                            "Turkey",
+                            "",
                           ),
                           trailing: Icon(Icons.edit, color: AppColors.osloGray),
                         ),
@@ -161,13 +209,17 @@ class ProfilePage extends StatelessWidget {
                           padding: const EdgeInsets.all(10.0),
                           child: Center(
                             child: RectangleRoundedButton(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const SignInPage(),
-                                  ),
-                                );
+                              onTap: () async {
+                                await _signOut();
+                                if (_user == null) {
+                                  // Optionally show a dialog or snackbar
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content:
+                                          Text('You have been signed out.'),
+                                    ),
+                                  );
+                                }
                               },
                               buttonText: "Sign Out",
                               buttonColor: AppColors.athenasGray,

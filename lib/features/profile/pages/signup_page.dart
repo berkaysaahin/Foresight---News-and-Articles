@@ -1,12 +1,17 @@
+import "dart:io";
+
 import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
 import "package:font_awesome_flutter/font_awesome_flutter.dart";
+import "package:foresight_news_and_articles/core/main_page.dart";
 import "package:foresight_news_and_articles/core/rectangle_rounded_button.dart";
+import "package:foresight_news_and_articles/core/services/authentication.dart";
 import "package:foresight_news_and_articles/features/home/widgets/form_field.dart";
 import "package:foresight_news_and_articles/features/home/widgets/secondary_top_buttons.dart";
 import "package:foresight_news_and_articles/features/home/widgets/side_bar.dart";
 import "package:foresight_news_and_articles/features/profile/pages/signin_page.dart";
 import "package:foresight_news_and_articles/theme/app_colors.dart";
+import "package:image_picker/image_picker.dart";
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -16,6 +21,11 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
+  final ImagePicker _picker = ImagePicker();
+  XFile? _image;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +60,14 @@ class _SignUpPageState extends State<SignUpPage> {
                             ClipRRect(
                               borderRadius: BorderRadius.circular(15.0),
                               child: GestureDetector(
-                                onTap: () {},
+                                onTap: () async {
+                                  final XFile? image = await _picker.pickImage(
+                                      source: ImageSource.gallery);
+                                  if (image == null) return;
+                                  setState(() {
+                                    _image = image;
+                                  });
+                                },
                                 child: Container(
                                   height: 70.0,
                                   width: 70.0,
@@ -67,26 +84,53 @@ class _SignUpPageState extends State<SignUpPage> {
                           const SizedBox(
                             height: 26,
                           ),
-                          const FormFieldSample(
+                          FormFieldSample(
+                            controller: _usernameController,
                             hintText: "Full Name",
                             labelText: "Full Name",
                           ),
                           const SizedBox(
                             height: 16,
                           ),
-                          const FormFieldSample(
+                          FormFieldSample(
+                            controller: _emailController,
                             hintText: "Email Address",
                             labelText: "Email Address",
                           ),
                           const SizedBox(
                             height: 16,
                           ),
-                          const FormFieldSample(
+                          FormFieldSample(
+                            controller: _passwordController,
                             hintText: "Password",
                             labelText: "Password",
                           ),
                           const SizedBox(
                             height: 16,
+                          ),
+                          RectangleRoundedButton(
+                            buttonIcon: FontAwesomeIcons.google,
+                            buttonColor: AppColors.azureRadiance,
+                            textColor: AppColors.white,
+                            onTap: () async {
+                              final message = await AuthService().registration(
+                                email: _emailController.text,
+                                password: _passwordController.text,
+                                name: _usernameController.text,
+                                photo: File(_image!.path),
+                              );
+                              if (message!.contains('Success')) {
+                                Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const MainPage()));
+                              }
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(message),
+                                ),
+                              );
+                            },
                           ),
                           const Row(
                             children: [

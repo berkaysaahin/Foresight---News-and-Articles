@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:foresight_news_and_articles/core/utils/app_date_formatters.dart';
 import 'package:foresight_news_and_articles/features/browse/pages/single_news_item_page.dart';
 import 'package:foresight_news_and_articles/theme/app_colors.dart';
 
@@ -10,7 +9,7 @@ class HomeSliderItem extends StatelessWidget {
   final String title;
   final String content;
   final String author;
-  final DateTime date;
+  final String date;
   final String authorImageAssetPath;
   const HomeSliderItem(
       {super.key,
@@ -52,7 +51,7 @@ class HomeSliderItem extends StatelessWidget {
             child: Stack(
               alignment: AlignmentDirectional.bottomCenter,
               children: [
-                Image.asset(
+                Image.network(
                   imageAssetPath,
                   fit: BoxFit.cover,
                   width: double.maxFinite,
@@ -95,7 +94,7 @@ class HomeSliderItem extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        '$author · ${AppDateFormatters.mdY(date)}',
+                        '$author · $date',
                         style:
                             Theme.of(context).textTheme.titleMedium?.copyWith(
                                   color: AppColors.white,

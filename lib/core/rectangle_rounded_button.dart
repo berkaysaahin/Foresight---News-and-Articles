@@ -2,18 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:foresight_news_and_articles/theme/app_colors.dart';
 
 class RectangleRoundedButton extends StatelessWidget {
+  @override
+  final Key? key;
   final Function() onTap;
-  String? buttonText;
+  final String? buttonText;
   final Color? buttonColor;
   final Color? textColor;
-  IconData? buttonIcon;
-  RectangleRoundedButton(
-      {super.key,
-      required this.onTap,
-      this.buttonText,
-      this.buttonColor,
-      this.textColor,
-      this.buttonIcon});
+  final IconData? buttonIcon;
+  const RectangleRoundedButton({
+    required this.onTap,
+    this.buttonText,
+    this.buttonColor,
+    this.textColor,
+    this.buttonIcon,
+    this.key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

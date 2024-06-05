@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:foresight_news_and_articles/core/utils/app_date_formatters.dart';
 import 'package:foresight_news_and_articles/features/browse/pages/single_news_item_page.dart';
 import 'package:foresight_news_and_articles/theme/app_colors.dart';
 
@@ -10,7 +9,7 @@ class NewsListItem extends StatelessWidget {
   final String category;
   final String authorImageAssetPath;
   final String imageAssetPath;
-  final DateTime date;
+  final String date;
   const NewsListItem(
       {super.key,
       required this.title,
@@ -46,7 +45,7 @@ class NewsListItem extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(20),
-              child: Image.asset(
+              child: Image.network(
                 imageAssetPath,
                 width: 150,
                 height: 150,
@@ -79,7 +78,7 @@ class NewsListItem extends StatelessWidget {
                   Row(
                     children: [
                       CircleAvatar(
-                        backgroundImage: AssetImage(
+                        backgroundImage: NetworkImage(
                           authorImageAssetPath,
                         ),
                         radius: 15,
@@ -89,7 +88,7 @@ class NewsListItem extends StatelessWidget {
                       ),
                       Flexible(
                         child: Text(
-                          '$author · ${AppDateFormatters.mdY(date)}',
+                          '$author · $date',
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),

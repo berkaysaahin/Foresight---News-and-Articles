@@ -9,7 +9,7 @@ class SingleNewsItemPage extends StatefulWidget {
   final String category;
   final String authorImageAssetPath;
   final String imageAssetPath;
-  final DateTime date;
+  final String date;
   const SingleNewsItemPage(
       {super.key,
       required this.title,

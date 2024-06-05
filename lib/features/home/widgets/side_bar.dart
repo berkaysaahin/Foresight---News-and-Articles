@@ -1,5 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:foresight_news_and_articles/dummy.dart';
 import 'package:foresight_news_and_articles/theme/app_colors.dart';
 
 class SideBar extends StatelessWidget {
@@ -7,28 +7,34 @@ class SideBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String authorImageAssetPath = newsrItems[2]['authorImageAssetPath']!;
+    User? user = FirebaseAuth.instance.currentUser;
     return Drawer(
       child: ListView(
         children: [
           UserAccountsDrawerHeader(
-            accountName: const Text(
-              "Berkay Şahin",
-              style: TextStyle(color: AppColors.black),
+            accountName: Text(
+              user != null ? user.displayName ?? "" : "",
+              style: const TextStyle(color: AppColors.black),
             ),
-            accountEmail: const Text(
-              "berkaaysaahin@gmail.com",
-              style: TextStyle(color: AppColors.black08),
+            accountEmail: Text(
+              user != null ? user.email ?? "" : "",
+              style: const TextStyle(color: AppColors.black08),
             ),
             currentAccountPicture: CircleAvatar(
-              backgroundColor: AppColors.athenasGray,
+              backgroundColor: AppColors.white,
               child: ClipOval(
-                child: Image.asset(
-                  authorImageAssetPath,
-                  width: 65,
-                  height: 65,
-                  fit: BoxFit.cover,
-                ),
+                child: user != null && user.photoURL != null
+                    ? Image.network(
+                        user.photoURL!,
+                        width: 65,
+                        height: 65,
+                        fit: BoxFit.cover,
+                      )
+                    : const Icon(
+                        Icons.person,
+                        size: 55,
+                        color: AppColors.porcelain,
+                      ),
               ),
             ),
             decoration: const BoxDecoration(

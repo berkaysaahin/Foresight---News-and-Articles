@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:foresight_news_and_articles/dummy.dart';
 import 'package:foresight_news_and_articles/features/home/widgets/home_slider_indicator_item.dart';
 import 'package:foresight_news_and_articles/features/home/widgets/home_slider_item.dart';
 
 class HomeSlider extends StatefulWidget {
-  const HomeSlider({super.key});
+  final List<Map<String, dynamic>> newsItems;
+  const HomeSlider({super.key, required this.newsItems});
 
   @override
   State<HomeSlider> createState() => _HomeSliderState();
@@ -27,7 +27,7 @@ class _HomeSliderState extends State<HomeSlider> {
     super.initState();
     _pageController = PageController(
       viewportFraction: 0.8,
-      initialPage: newsrItems.length * 100,
+      initialPage: widget.newsItems.length * 100,
     );
     _scrollController = ScrollController(
       initialScrollOffset: _calculateIndicatorOffset(),
@@ -70,7 +70,7 @@ class _HomeSliderState extends State<HomeSlider> {
             child: PageView.builder(
               onPageChanged: (value) {
                 setState(() {
-                  _pageIndex = value % newsrItems.length;
+                  _pageIndex = value % widget.newsItems.length;
                 });
                 _scrollController.animateTo(
                   _calculateIndicatorOffset(),
@@ -80,16 +80,17 @@ class _HomeSliderState extends State<HomeSlider> {
               },
               controller: _pageController,
               itemBuilder: (context, index) {
-                final i = index % newsrItems.length;
+                final i = index % widget.newsItems.length;
                 return HomeSliderItem(
                   isActive: _pageIndex == i,
-                  imageAssetPath: newsrItems[i]['imageAssetPath']!,
-                  authorImageAssetPath: newsrItems[i]['authorImageAssetPath']!,
-                  category: newsrItems[i]['category']!,
-                  title: newsrItems[i]['title']!,
-                  content: newsrItems[i]['content']!,
-                  author: newsrItems[i]['author']!,
-                  date: DateTime.parse(newsrItems[i]['date']!),
+                  imageAssetPath: widget.newsItems[i]['imageAssetPath']!,
+                  authorImageAssetPath: widget.newsItems[i]
+                      ['authorImageAssetPath']!,
+                  category: widget.newsItems[i]['category']!,
+                  title: widget.newsItems[i]['title']!,
+                  content: widget.newsItems[i]['content']!,
+                  author: widget.newsItems[i]['author']!,
+                  date: widget.newsItems[i]['date']!,
                 );
               },
             ),
@@ -104,7 +105,7 @@ class _HomeSliderState extends State<HomeSlider> {
               child: ListView.builder(
                   controller: _scrollController,
                   scrollDirection: Axis.horizontal,
-                  itemCount: newsrItems.length * 20,
+                  itemCount: widget.newsItems.length * 20,
                   itemBuilder: (context, index) {
                     return HomeSliderIndicatorItem(
                       isActive: index == _pageIndex,

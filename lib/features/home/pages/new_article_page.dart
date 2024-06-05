@@ -228,8 +228,10 @@ class _NewArticlePageState extends State<NewArticlePage> {
                                 "content": content,
                                 "category": category,
                                 "date": formattedDate,
-                                "imageAsset":
-                                    imageUrl, // URL of the uploaded image
+                                "imageAsset": imageUrl,
+                                "author": _currentUser?.displayName,
+                                "authorImage": _currentUser?.photoURL
+                                // URL of the uploaded image
                               });
 
                               // Clear text fields

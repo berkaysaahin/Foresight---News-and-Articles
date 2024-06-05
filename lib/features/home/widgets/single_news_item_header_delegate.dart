@@ -3,14 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:foresight_news_and_articles/core/app_rounded_button.dart';
 import 'package:foresight_news_and_articles/core/app_rounded_button_blur.dart';
-import 'package:foresight_news_and_articles/core/utils/app_date_formatters.dart';
 import 'package:foresight_news_and_articles/theme/app_colors.dart';
 
 class SingleNewsItemHeaderDelegate extends SliverPersistentHeaderDelegate {
   final String title;
   final String category;
   final String imageAssetPath;
-  final DateTime date;
+  final String date;
   final double topPadding;
 
   final Function(double value) borderRadiusAnimationValue;
@@ -67,7 +66,7 @@ class SingleNewsItemHeaderDelegate extends SliverPersistentHeaderDelegate {
           bottom: -10,
           left: 0,
           right: 0,
-          child: Image.asset(
+          child: Image.network(
             imageAssetPath,
             fit: BoxFit.cover,
           ),
@@ -141,7 +140,7 @@ class SingleNewsItemHeaderDelegate extends SliverPersistentHeaderDelegate {
                     duration: animationDuration,
                     child: showCategoryDate
                         ? Text(
-                            AppDateFormatters.mdY(date),
+                            date,
                             style: Theme.of(context)
                                 .textTheme
                                 .titleMedium

@@ -3,13 +3,12 @@ import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
 import "package:foresight_news_and_articles/core/app_rounded_button.dart";
 import "package:foresight_news_and_articles/core/rectangle_rounded_button.dart";
-import "package:foresight_news_and_articles/dummy.dart";
 import "package:foresight_news_and_articles/features/home/widgets/side_bar.dart";
 import "package:foresight_news_and_articles/features/profile/pages/signin_page.dart";
 import "package:foresight_news_and_articles/theme/app_colors.dart";
 
 class ProfilePage extends StatefulWidget {
-  ProfilePage({Key? key}) : super(key: key);
+  const ProfilePage({Key? key}) : super(key: key);
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -50,8 +49,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    String authorImageAssetPath = newsrItems[2]['authorImageAssetPath']!;
-
     return Scaffold(
       key: _scaffoldKey,
       drawer: const SideBar(),

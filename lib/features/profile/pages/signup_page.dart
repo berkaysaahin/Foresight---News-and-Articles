@@ -106,10 +106,10 @@ class _SignUpPageState extends State<SignUpPage> {
                             labelText: "Password",
                           ),
                           const SizedBox(
-                            height: 16,
+                            height: 24,
                           ),
                           RectangleRoundedButton(
-                            buttonIcon: FontAwesomeIcons.google,
+                            buttonText: "Sign Up",
                             buttonColor: AppColors.azureRadiance,
                             textColor: AppColors.white,
                             onTap: () async {
@@ -132,6 +132,9 @@ class _SignUpPageState extends State<SignUpPage> {
                               );
                             },
                           ),
+                          const SizedBox(
+                            height: 24,
+                          ),
                           const Row(
                             children: [
                               Expanded(child: Divider()),
@@ -143,7 +146,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             ],
                           ),
                           const SizedBox(
-                            height: 16,
+                            height: 24,
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -173,7 +176,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                     ),
                                   );
                                 },
-                                buttonIcon: FontAwesomeIcons.google,
+                                buttonIcon: FontAwesomeIcons.facebook,
                                 buttonColor: AppColors.azureRadiance,
                                 textColor: AppColors.white,
                               ),

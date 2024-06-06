@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:foresight_news_and_articles/features/home/pages/all_news_page.dart';
 import 'package:foresight_news_and_articles/theme/app_colors.dart';
 
 class SideBar extends StatelessWidget {
@@ -48,7 +49,16 @@ class SideBar extends StatelessWidget {
               "All",
               style: Theme.of(context).textTheme.bodyLarge,
             ),
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AllNewsPage(
+                    newsItems: [],
+                  ),
+                ),
+              );
+            },
             leading: const Icon(
               Icons.library_books,
               color: Colors.black,

@@ -65,10 +65,10 @@ class _SignInPageState extends State<SignInPage> {
                             labelText: "Password",
                           ),
                           const SizedBox(
-                            height: 16,
+                            height: 24,
                           ),
                           RectangleRoundedButton(
-                            buttonIcon: FontAwesomeIcons.google,
+                            buttonText: "Sign in",
                             buttonColor: AppColors.azureRadiance,
                             textColor: AppColors.white,
                             onTap: () async {
@@ -90,6 +90,9 @@ class _SignInPageState extends State<SignInPage> {
                               );
                             },
                           ),
+                          const SizedBox(
+                            height: 24,
+                          ),
                           const Row(
                             children: [
                               Expanded(child: Divider()),
@@ -101,7 +104,7 @@ class _SignInPageState extends State<SignInPage> {
                             ],
                           ),
                           const SizedBox(
-                            height: 16,
+                            height: 24,
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -131,7 +134,7 @@ class _SignInPageState extends State<SignInPage> {
                                     ),
                                   );
                                 },
-                                buttonIcon: FontAwesomeIcons.google,
+                                buttonIcon: FontAwesomeIcons.facebook,
                                 buttonColor: AppColors.azureRadiance,
                                 textColor: AppColors.white,
                               ),

@@ -13,7 +13,7 @@ class AllNewsPage extends StatelessWidget {
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
-            SecondaryTopButtons(pageTitle: 'All News'),
+            const SecondaryTopButtons(pageTitle: 'All News'),
             NewsList(newsItems: newsItems),
           ],
         ),

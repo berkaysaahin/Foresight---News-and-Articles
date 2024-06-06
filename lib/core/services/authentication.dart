@@ -18,7 +18,7 @@ class AuthService {
         password: password,
       );
       String photoURL =
-          await _uploadProfilePicture(userCredential.user!.uid, photo);
+          await uploadProfilePicture(userCredential.user!.uid, photo);
       await userCredential.user
           ?.updateProfile(displayName: name, photoURL: photoURL);
 
@@ -61,7 +61,7 @@ class AuthService {
     }
   }
 
-  Future<String> _uploadProfilePicture(String uid, File photo) async {
+  Future<String> uploadProfilePicture(String uid, File photo) async {
     try {
       Reference ref = _storage.ref().child('profile_pictures').child(uid);
       UploadTask uploadTask = ref.putFile(photo);
@@ -70,6 +70,32 @@ class AuthService {
       return downloadURL;
     } catch (e) {
       throw Exception('Failed to upload profile picture: $e');
+    }
+  }
+
+  Future<void> updateUsername(String uid, String username) async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        await user.updateDisplayName(username);
+      } else {
+        throw Exception('User is not signed in.');
+      }
+    } catch (e) {
+      throw Exception('Failed to update username: $e');
+    }
+  }
+
+  Future<void> updateEmail(String uid, String email) async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        await user.updateEmail(email);
+      } else {
+        throw Exception('User is not signed in.');
+      }
+    } catch (e) {
+      throw Exception('Failed to update email: $e');
     }
   }
 }

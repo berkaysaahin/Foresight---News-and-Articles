@@ -201,6 +201,7 @@ class SingleNewsItemHeaderDelegate extends SliverPersistentHeaderDelegate {
                         secondChild: Text(
                           title,
                           style: Theme.of(context).textTheme.titleLarge,
+                          overflow: TextOverflow.ellipsis,
                         ),
                         firstChild: Row(
                           mainAxisAlignment: MainAxisAlignment.end,

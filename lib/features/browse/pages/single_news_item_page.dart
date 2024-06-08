@@ -71,7 +71,7 @@ class _SingleNewsItemPageState extends State<SingleNewsItemPage> {
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
                   const SizedBox(
-                    height: 30,
+                    height: 20,
                   ),
                   Text(widget.content),
                 ],

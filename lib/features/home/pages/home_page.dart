@@ -8,8 +8,22 @@ import 'package:foresight_news_and_articles/features/home/widgets/news_list.dart
 import 'package:foresight_news_and_articles/features/home/widgets/side_bar.dart';
 import 'package:foresight_news_and_articles/theme/app_colors.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({Key? key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  List<Map<String, dynamic>> _newsItems = [];
+  String _searchText = '';
+  void updateSearchResults(String query) {
+    // Update UI in HomePage based on the search query
+    setState(() {
+      // Update specific state variables here
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +38,7 @@ class HomePage extends StatelessWidget {
             } else if (snapshot.hasError) {
               return const Center(child: Text('Error occurred'));
             } else if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
-              final newsItems = snapshot.data!.docs.map((doc) {
+              _newsItems = snapshot.data!.docs.map((doc) {
                 return {
                   'imageAssetPath': doc['imageAsset'],
                   'category': doc['category'],
@@ -35,50 +49,83 @@ class HomePage extends StatelessWidget {
                   'date': doc['date'],
                 };
               }).toList();
+              List<Map<String, dynamic>> filteredNewsItems = _searchText.isEmpty
+                  ? _newsItems
+                  : _newsItems.where((newsItem) {
+                      // Filter based on search query
+                      return newsItem['title']
+                          .toLowerCase()
+                          .contains(_searchText.toLowerCase());
+                    }).toList();
 
               return CustomScrollView(
                 slivers: [
-                  const HomeTopButtons(),
-                  HomeHeading(
-                    title: 'Breaking News',
-                    trailing: TextButton(
-                      child: const Text(
-                        'View All',
-                        style: TextStyle(color: AppColors.azureRadiance),
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => AllNewsPage(
-                              newsItems: newsItems,
-                            ),
-                          ),
-                        );
-                      },
-                    ),
+                  HomeTopButtons(
+                    onSearchSubmitted: updateSearchResults,
+                    onSearchTextChanged: (String searchText) {
+                      setState(() {
+                        _searchText = searchText;
+                      });
+                    },
                   ),
-                  HomeSlider(newsItems: newsItems),
-                  HomeHeading(
-                    title: 'Recommendation',
-                    trailing: TextButton(
-                      child: const Text(
-                        'View All',
-                        style: TextStyle(color: AppColors.azureRadiance),
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => AllNewsPage(
-                              newsItems: newsItems,
+                  _searchText.isEmpty
+                      ? HomeHeading(
+                          title: 'Breaking News',
+                          trailing: TextButton(
+                            child: const Text(
+                              'View All',
+                              style: TextStyle(color: AppColors.azureRadiance),
                             ),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => AllNewsPage(
+                                    newsItems: _newsItems,
+                                  ),
+                                ),
+                              );
+                            },
                           ),
-                        );
-                      },
-                    ),
-                  ),
-                  NewsList(newsItems: newsItems),
+                        )
+                      : HomeHeading(
+                          title: 'Filtered News',
+                          trailing: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                _searchText = ''; // Clear search text
+                              });
+                            },
+                            icon: const Icon(Icons.close),
+                          ),
+                        ),
+                  _searchText.isEmpty
+                      ? HomeSlider(newsItems: _newsItems)
+                      : const SliverToBoxAdapter(child: SizedBox()),
+                  _searchText.isEmpty
+                      ? HomeHeading(
+                          title: 'Recommendation',
+                          trailing: TextButton(
+                            child: const Text(
+                              'View All',
+                              style: TextStyle(color: AppColors.azureRadiance),
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => AllNewsPage(
+                                    newsItems: _newsItems,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        )
+                      : const SliverToBoxAdapter(
+                          child: SizedBox(),
+                        ),
+                  NewsList(newsItems: filteredNewsItems),
                 ],
               );
             } else {

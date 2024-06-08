@@ -145,7 +145,7 @@ class _NewArticlePageState extends State<NewArticlePage> {
                   child: Row(
                     children: [
                       ClipRRect(
-                        borderRadius: BorderRadius.circular(50.0),
+                        borderRadius: BorderRadius.circular(30.0),
                         child: Container(
                           height: 50.0,
                           width: 50.0,
@@ -238,6 +238,7 @@ class _NewArticlePageState extends State<NewArticlePage> {
                               titleController.clear();
                               contentController.clear();
                               categoryController.clear();
+                              imageUrl = "";
 
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
@@ -255,6 +256,7 @@ class _NewArticlePageState extends State<NewArticlePage> {
                                 ),
                               );
                             }
+                            setState(() {});
                           }
                         },
                         buttonText: "Submit",
@@ -273,45 +275,79 @@ class _NewArticlePageState extends State<NewArticlePage> {
                       decoration: const BoxDecoration(
                         color: AppColors.porcelain,
                         borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(40),
-                          topRight: Radius.circular(40),
+                          topLeft: Radius.circular(16),
+                          topRight: Radius.circular(16),
                         ),
                       ),
-                      height: 100,
-                      child: Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Icon(
-                              FontAwesomeIcons.image,
-                              size: 36,
-                              color: AppColors.osloGray,
-                            ), // You can change the icon and size as needed
-                            const SizedBox(
-                                width:
-                                    8), // Adds space between the icon and the text
-                            Text(
-                              "Add Cover Photo",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium
-                                  ?.copyWith(
-                                    color: AppColors.osloGray,
+                      height: 180,
+                      child: _selectedImage != null
+                          ? Padding(
+                              padding: const EdgeInsets.all(4),
+                              child: Stack(
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(16.0),
+                                      topRight: Radius.circular(16.0),
+                                    ), // Set desired radius
+                                    child: Image.file(
+                                      _selectedImage!,
+                                      height: 180,
+                                      width: MediaQuery.of(context).size.width,
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
-                            ),
-                            if (_selectedImage != null)
-                              Padding(
-                                padding: const EdgeInsets.only(left: 8),
-                                child: Image.file(
-                                  _selectedImage!,
-                                  height: 50,
-                                  width: 50,
-                                  fit: BoxFit.cover,
-                                ),
+                                  Positioned(
+                                    bottom: 8,
+                                    left: 8,
+                                    child: Text(
+                                      "Tap to change cover photo",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleLarge
+                                          ?.copyWith(
+                                        color: Colors
+                                            .white, // Make text transparent
+                                        shadows: [
+                                          const Shadow(
+                                            // Adjust offset values for desired outline thickness
+                                            offset: Offset(-1, -1),
+                                            color:
+                                                Colors.black, // Outline color
+                                            blurRadius:
+                                                0.0, // No blur for sharp outline
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                          ],
-                        ),
-                      ),
+                            )
+                          : Center(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Icon(
+                                    FontAwesomeIcons.image,
+                                    size: 36,
+                                    color: AppColors.osloGray,
+                                  ), // You can change the icon and size as needed
+                                  const SizedBox(
+                                      width:
+                                          8), // Adds space between the icon and the text
+                                  Text(
+                                    "Add Cover Photo",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium
+                                        ?.copyWith(
+                                          color: AppColors.osloGray,
+                                        ),
+                                  ),
+                                ],
+                              ),
+                            ),
                     ),
                   ),
                 ),
@@ -324,10 +360,6 @@ class _NewArticlePageState extends State<NewArticlePage> {
                     child: Container(
                       decoration: const BoxDecoration(
                         color: AppColors.white,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(40),
-                          topRight: Radius.circular(40),
-                        ),
                       ),
                       child: Column(
                         children: [

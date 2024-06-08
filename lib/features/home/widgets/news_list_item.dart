@@ -71,6 +71,7 @@ class NewsListItem extends StatelessWidget {
                   Text(
                     title,
                     style: Theme.of(context).textTheme.titleMedium,
+                    maxLines: 3,
                   ),
                   const SizedBox(
                     height: 7,

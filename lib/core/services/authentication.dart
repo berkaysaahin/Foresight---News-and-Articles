@@ -5,6 +5,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 
 class AuthService {
   final FirebaseStorage _storage = FirebaseStorage.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
   Future<String?> registration({
     required String email,
     required String password,
@@ -13,7 +15,7 @@ class AuthService {
   }) async {
     try {
       UserCredential userCredential =
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -34,7 +36,7 @@ class AuthService {
         return e.message;
       }
     } catch (e) {
-      return e.toString();
+      return 'Registration failed: ${e.toString()}';
     }
   }
 
@@ -43,7 +45,7 @@ class AuthService {
     required String password,
   }) async {
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
+      await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -57,7 +59,7 @@ class AuthService {
         return e.message;
       }
     } catch (e) {
-      return e.toString();
+      return 'Login failed: ${e.toString()}';
     }
   }
 
@@ -75,9 +77,10 @@ class AuthService {
 
   Future<void> updateUsername(String uid, String username) async {
     try {
-      User? user = FirebaseAuth.instance.currentUser;
+      User? user = _auth.currentUser;
       if (user != null) {
         await user.updateDisplayName(username);
+        await user.reload(); // Ensure user data is reloaded
       } else {
         throw Exception('User is not signed in.');
       }
@@ -88,9 +91,10 @@ class AuthService {
 
   Future<void> updateEmail(String uid, String email) async {
     try {
-      User? user = FirebaseAuth.instance.currentUser;
+      User? user = _auth.currentUser;
       if (user != null) {
         await user.updateEmail(email);
+        await user.reload(); // Ensure user data is reloaded
       } else {
         throw Exception('User is not signed in.');
       }

@@ -53,13 +53,21 @@ class _ProfilePageState extends State<ProfilePage> {
       if (pickedFile != null) {
         File photo = File(pickedFile.path);
         try {
-          String photoURL =
-              await _authService.uploadProfilePicture(_user!.uid, photo);
-          await _user?.updateProfile(photoURL: photoURL);
-          await _user?.reload();
-          _user = _auth.currentUser;
-          setState(() {});
+          // Make sure _user is not null
+          if (_user != null) {
+            String photoURL =
+                await _authService.uploadProfilePicture(_user!.uid, photo);
+            await _user!.updateProfile(photoURL: photoURL);
+            await _user!.reload();
+            // Fetch the updated user information
+            _user = _auth.currentUser;
+            setState(() {});
+          } else {
+            throw FirebaseAuthException(
+                code: 'user-not-found', message: 'User is not authenticated.');
+          }
         } catch (e) {
+          print('Failed to update profile picture: $e');
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
@@ -76,6 +84,7 @@ class _ProfilePageState extends State<ProfilePage> {
         }
       }
     } catch (e) {
+      print('Failed to pick image: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(

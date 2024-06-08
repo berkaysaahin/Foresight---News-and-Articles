@@ -109,6 +109,7 @@ class HomeSliderItem extends StatelessWidget {
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
                               color: AppColors.white,
                             ),
+                        maxLines: 3,
                       ),
                     ],
                   ),

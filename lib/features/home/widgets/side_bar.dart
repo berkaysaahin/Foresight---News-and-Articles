@@ -83,37 +83,123 @@ class SideBar extends StatelessWidget {
               color: Colors.black,
             ),
           ),
-          ListTile(
-            title: const Text("Technology"),
-            onTap: () {},
-            leading: const Icon(
-              Icons.phone_android,
-              color: Colors.black,
+          ExpansionTile(
+            collapsedShape: const RoundedRectangleBorder(
+              side: BorderSide.none,
             ),
-          ),
-          ListTile(
-            title: const Text("Science"),
-            onTap: () {},
-            leading: const Icon(
-              Icons.science,
-              color: Colors.black,
+            shape: const RoundedRectangleBorder(
+              side: BorderSide.none,
             ),
-          ),
-          ListTile(
-            title: const Text("Sports"),
-            onTap: () {},
-            leading: const Icon(
-              Icons.sports_volleyball,
-              color: Colors.black,
+            title: Text(
+              "Categories",
+              style: Theme.of(context).textTheme.bodyLarge,
             ),
-          ),
-          ListTile(
-            title: const Text("Favorites"),
-            onTap: () {},
-            leading: const Icon(
-              Icons.favorite,
-              color: Colors.black,
-            ),
+            children: [
+              ListTile(
+                title: const Text("Business"),
+                onTap: () {},
+                leading: const Icon(
+                  Icons.business_center_sharp,
+                  color: Colors.black,
+                ),
+              ),
+              ListTile(
+                title: const Text("Politics"),
+                onTap: () {},
+                leading: const Icon(
+                  Icons.science,
+                  color: Colors.black,
+                ),
+              ),
+              ListTile(
+                title: const Text("Science"),
+                onTap: () {},
+                leading: const Icon(
+                  Icons.sports_volleyball,
+                  color: Colors.black,
+                ),
+              ),
+              ListTile(
+                title: const Text("Technology"),
+                onTap: () {},
+                leading: const Icon(
+                  Icons.favorite,
+                  color: Colors.black,
+                ),
+              ),
+              ListTile(
+                title: const Text("Health"),
+                onTap: () {},
+                leading: const Icon(
+                  Icons.phone_android,
+                  color: Colors.black,
+                ),
+              ),
+              ListTile(
+                title: const Text("Education"),
+                onTap: () {},
+                leading: const Icon(
+                  Icons.science,
+                  color: Colors.black,
+                ),
+              ),
+              ListTile(
+                title: const Text("Travel"),
+                onTap: () {},
+                leading: const Icon(
+                  Icons.sports_volleyball,
+                  color: Colors.black,
+                ),
+              ),
+              ListTile(
+                title: const Text("Art"),
+                onTap: () {},
+                leading: const Icon(
+                  Icons.favorite,
+                  color: Colors.black,
+                ),
+              ),
+              ListTile(
+                title: const Text("Sports"),
+                onTap: () {},
+                leading: const Icon(
+                  Icons.favorite,
+                  color: Colors.black,
+                ),
+              ),
+              ListTile(
+                title: const Text("Books"),
+                onTap: () {},
+                leading: const Icon(
+                  Icons.favorite,
+                  color: Colors.black,
+                ),
+              ),
+              ListTile(
+                title: const Text("Movies"),
+                onTap: () {},
+                leading: const Icon(
+                  Icons.favorite,
+                  color: Colors.black,
+                ),
+              ),
+              ListTile(
+                title: const Text("Fashion"),
+                onTap: () {},
+                leading: const Icon(
+                  Icons.favorite,
+                  color: Colors.black,
+                ),
+              ),
+              ListTile(
+                title: const Text("Dining"),
+                onTap: () {},
+                leading: const Icon(
+                  Icons.favorite,
+                  color: Colors.black,
+                ),
+              ),
+            ],
           ),
         ],
       ),

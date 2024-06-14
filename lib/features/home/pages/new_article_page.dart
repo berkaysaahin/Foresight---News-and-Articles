@@ -25,7 +25,7 @@ class _NewArticlePageState extends State<NewArticlePage> {
 
   final contentController = TextEditingController();
 
-  final categoryController = TextEditingController();
+  String category = '';
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -185,11 +185,8 @@ class _NewArticlePageState extends State<NewArticlePage> {
                               FirebaseFirestore.instance.collection("news");
                           String title = titleController.text.trim();
                           String content = contentController.text.trim();
-                          String category = categoryController.text.trim();
 
-                          if (title.isEmpty ||
-                              content.isEmpty ||
-                              category.isEmpty) {
+                          if (title.isEmpty || content.isEmpty) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                 content: Text('All fields are required.'),
@@ -237,8 +234,8 @@ class _NewArticlePageState extends State<NewArticlePage> {
                               // Clear text fields
                               titleController.clear();
                               contentController.clear();
-                              categoryController.clear();
                               imageUrl = "";
+                              category = "";
 
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
@@ -353,6 +350,48 @@ class _NewArticlePageState extends State<NewArticlePage> {
                 ),
               ),
               SliverToBoxAdapter(
+                child: DropdownButtonFormField<String>(
+                  decoration: const InputDecoration(
+                    hintText: 'Select a category for your article',
+                    fillColor: AppColors.porcelain,
+                    enabledBorder:
+                        OutlineInputBorder(borderSide: BorderSide.none),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide.none // Border color when focused
+                        ),
+                    // Add an icon
+                    // ... other InputDecoration properties ...
+                  ),
+                  value: category.isEmpty ? null : category,
+                  items: <String>[
+                    'International News',
+                    'Business News',
+                    'Political News',
+                    'Science News',
+                    'Technology News',
+                    'Health News',
+                    'Education News',
+                    'Travel',
+                    'The Arts',
+                    'Sports',
+                    'Books',
+                    'Movies',
+                    'Fashion',
+                    'Dining',
+                  ].map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      category = newValue ?? '';
+                    });
+                  },
+                ),
+              ),
+              SliverToBoxAdapter(
                 child: Container(
                   color: AppColors.porcelain,
                   child: Padding(
@@ -407,22 +446,6 @@ class _NewArticlePageState extends State<NewArticlePage> {
                                 contentPadding: EdgeInsets.only(
                                     top: 20.0, left: 10.0, right: 10.0),
                                 alignLabelWithHint: true),
-                          ),
-                          TextField(
-                            controller: categoryController,
-                            maxLines: 1,
-                            minLines: 1,
-                            decoration: const InputDecoration(
-                              hintText: 'Select a category for your article.',
-                              border: OutlineInputBorder(
-                                borderSide: BorderSide.none,
-                                borderRadius: BorderRadius.vertical(
-                                  top: Radius.zero, // No top border radius
-                                  bottom:
-                                      Radius.zero, // No bottom border radius
-                                ),
-                              ),
-                            ),
                           ),
                         ],
                       ),

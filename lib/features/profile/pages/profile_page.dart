@@ -34,7 +34,6 @@ class _ProfilePageState extends State<ProfilePage> {
     _user = _auth.currentUser;
     if (_user == null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        // Navigate to SignInPage if user is not logged in
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(

@@ -50,7 +50,7 @@ class _NewArticlePageState extends State<NewArticlePage> {
   }
 
   Future<void> _pickImage() async {
-    if (await _requestPermission(Permission.storage)) {
+    if (await _requestPermission(Permission.photos)) {
       final picker = ImagePicker();
       final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 

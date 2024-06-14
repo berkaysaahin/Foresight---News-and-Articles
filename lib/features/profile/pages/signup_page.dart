@@ -68,16 +68,29 @@ class _SignUpPageState extends State<SignUpPage> {
                                     _image = image;
                                   });
                                 },
-                                child: Container(
-                                  height: 70.0,
-                                  width: 70.0,
-                                  color: AppColors.white,
-                                  child: const Icon(
-                                    CupertinoIcons.person_add_solid,
-                                    color: AppColors.azureRadiance,
-                                    size: 50.0,
-                                  ),
-                                ),
+                                child: _image != null
+                                    ? Container(
+                                        height: 70.0,
+                                        width: 70.0,
+                                        color: AppColors.white,
+                                        child: Image.file(
+                                          File(_image!.path),
+                                          height: 180,
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      )
+                                    : Container(
+                                        height: 70.0,
+                                        width: 70.0,
+                                        color: AppColors.white,
+                                        child: const Icon(
+                                          CupertinoIcons.person_add_solid,
+                                          color: AppColors.azureRadiance,
+                                          size: 50.0,
+                                        ),
+                                      ),
                               ),
                             ),
                           ]),

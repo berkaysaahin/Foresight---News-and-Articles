@@ -3,205 +3,192 @@ import 'package:flutter/material.dart';
 import 'package:foresight_news_and_articles/features/home/pages/all_news_page.dart';
 import 'package:foresight_news_and_articles/theme/app_colors.dart';
 
-class SideBar extends StatelessWidget {
+class SideBar extends StatefulWidget {
   const SideBar({super.key});
 
   @override
+  State<SideBar> createState() => _SideBarState();
+}
+
+class _SideBarState extends State<SideBar> {
+  User? user = FirebaseAuth.instance.currentUser;
+
+  Future<void> _signOut() async {
+    await FirebaseAuth.instance.signOut();
+    setState(() {
+      user = null;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    User? user = FirebaseAuth.instance.currentUser;
     return Drawer(
-      child: ListView(
-        children: [
-          UserAccountsDrawerHeader(
-            accountName: Text(
-              user != null ? user.displayName ?? "" : "",
-              style: const TextStyle(color: AppColors.black),
-            ),
-            accountEmail: Text(
-              user != null ? user.email ?? "" : "",
-              style: const TextStyle(color: AppColors.black08),
-            ),
-            currentAccountPicture: CircleAvatar(
-              backgroundColor: AppColors.white,
-              child: ClipOval(
-                child: user != null && user.photoURL != null
-                    ? Image.network(
-                        user.photoURL!,
-                        width: 65,
-                        height: 65,
-                        fit: BoxFit.cover,
-                      )
-                    : const Icon(
-                        Icons.person,
-                        size: 55,
-                        color: AppColors.porcelain,
-                      ),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(0),
+          bottomRight: Radius.circular(0),
+        ),
+      ),
+      child: Expanded(
+        child: ListView(
+          children: [
+            UserAccountsDrawerHeader(
+              accountName: Text(
+                user != null ? user!.displayName ?? "" : "",
+                style: const TextStyle(color: AppColors.black),
+              ),
+              accountEmail: Text(
+                user != null ? user!.email ?? "" : "",
+                style: const TextStyle(color: AppColors.black08),
+              ),
+              currentAccountPicture: CircleAvatar(
+                backgroundColor: AppColors.white,
+                child: ClipOval(
+                  child: user != null && user!.photoURL != null
+                      ? Image.network(
+                          user!.photoURL!,
+                          width: 65,
+                          height: 65,
+                          fit: BoxFit.cover,
+                        )
+                      : const Icon(
+                          Icons.person,
+                          size: 55,
+                          color: AppColors.porcelain,
+                        ),
+                ),
+              ),
+              decoration: const BoxDecoration(
+                color: AppColors.athenasGray,
+                border: Border(
+                    bottom: BorderSide(color: Colors.transparent, width: 0.0)),
               ),
             ),
-            decoration: const BoxDecoration(
-              color: AppColors.athenasGray,
-              border: Border(
-                  bottom: BorderSide(color: Colors.transparent, width: 0.0)),
-            ),
-          ),
-          ListTile(
-            title: Text(
-              "All",
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AllNewsPage(
-                    newsItems: [],
+            ListTile(
+              title: Text(
+                "All",
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AllNewsPage(
+                      newsItems: [],
+                    ),
                   ),
-                ),
-              );
-            },
-            leading: const Icon(
-              Icons.library_books,
-              color: Colors.black,
+                );
+              },
+              trailing: const Icon(
+                Icons.arrow_forward_ios_sharp,
+                size: 16,
+                color: AppColors.osloGray,
+              ),
             ),
-          ),
-          ListTile(
-            title: Text(
-              "News",
-              style: Theme.of(context).textTheme.bodyLarge,
+            ListTile(
+              title: Text(
+                "News",
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+              onTap: () {},
+              trailing: const Icon(
+                Icons.arrow_forward_ios_sharp,
+                size: 16,
+                color: AppColors.osloGray,
+              ),
             ),
-            onTap: () {},
-            leading: const Icon(
-              Icons.newspaper,
-              color: Colors.black,
+            ListTile(
+              title: const Text("Articles"),
+              onTap: () {},
+              trailing: const Icon(
+                Icons.arrow_forward_ios_sharp,
+                size: 16,
+                color: AppColors.osloGray,
+              ),
             ),
-          ),
-          ListTile(
-            title: const Text("Articles"),
-            onTap: () {},
-            leading: const Icon(
-              Icons.article,
-              color: Colors.black,
+            ExpansionTile(
+              collapsedShape: const RoundedRectangleBorder(
+                side: BorderSide.none,
+              ),
+              shape: const RoundedRectangleBorder(
+                side: BorderSide.none,
+              ),
+              title: Text(
+                "Categories",
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+              children: [
+                ListTile(
+                  title: const Text("Business"),
+                  onTap: () {},
+                ),
+                ListTile(
+                  title: const Text("Politics"),
+                  onTap: () {},
+                ),
+                ListTile(
+                  title: const Text("Science"),
+                  onTap: () {},
+                ),
+                ListTile(
+                  title: const Text("Technology"),
+                  onTap: () {},
+                ),
+                ListTile(
+                  title: const Text("Health"),
+                  onTap: () {},
+                ),
+                ListTile(
+                  title: const Text("Education"),
+                  onTap: () {},
+                ),
+                ListTile(
+                  title: const Text("Travel"),
+                  onTap: () {},
+                ),
+                ListTile(
+                  title: const Text("Art"),
+                  onTap: () {},
+                ),
+                ListTile(
+                  title: const Text("Sports"),
+                  onTap: () {},
+                ),
+                ListTile(
+                  title: const Text("Books"),
+                  onTap: () {},
+                ),
+                ListTile(
+                  title: const Text("Movies"),
+                  onTap: () {},
+                ),
+                ListTile(
+                  title: const Text("Fashion"),
+                  onTap: () {},
+                ),
+                ListTile(
+                  title: const Text("Dining"),
+                  onTap: () {},
+                ),
+              ],
             ),
-          ),
-          ExpansionTile(
-            collapsedShape: const RoundedRectangleBorder(
-              side: BorderSide.none,
+            const Spacer(),
+            ListTile(
+              title: const Text("Sign Out"),
+              onTap: () async {
+                await _signOut();
+                if (user == null) {
+                  // Optionally show a dialog or snackbar
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('You have been signed out.'),
+                    ),
+                  );
+                }
+              },
             ),
-            shape: const RoundedRectangleBorder(
-              side: BorderSide.none,
-            ),
-            title: Text(
-              "Categories",
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-            children: [
-              ListTile(
-                title: const Text("Business"),
-                onTap: () {},
-                leading: const Icon(
-                  Icons.business_center_sharp,
-                  color: Colors.black,
-                ),
-              ),
-              ListTile(
-                title: const Text("Politics"),
-                onTap: () {},
-                leading: const Icon(
-                  Icons.science,
-                  color: Colors.black,
-                ),
-              ),
-              ListTile(
-                title: const Text("Science"),
-                onTap: () {},
-                leading: const Icon(
-                  Icons.sports_volleyball,
-                  color: Colors.black,
-                ),
-              ),
-              ListTile(
-                title: const Text("Technology"),
-                onTap: () {},
-                leading: const Icon(
-                  Icons.favorite,
-                  color: Colors.black,
-                ),
-              ),
-              ListTile(
-                title: const Text("Health"),
-                onTap: () {},
-                leading: const Icon(
-                  Icons.phone_android,
-                  color: Colors.black,
-                ),
-              ),
-              ListTile(
-                title: const Text("Education"),
-                onTap: () {},
-                leading: const Icon(
-                  Icons.science,
-                  color: Colors.black,
-                ),
-              ),
-              ListTile(
-                title: const Text("Travel"),
-                onTap: () {},
-                leading: const Icon(
-                  Icons.sports_volleyball,
-                  color: Colors.black,
-                ),
-              ),
-              ListTile(
-                title: const Text("Art"),
-                onTap: () {},
-                leading: const Icon(
-                  Icons.favorite,
-                  color: Colors.black,
-                ),
-              ),
-              ListTile(
-                title: const Text("Sports"),
-                onTap: () {},
-                leading: const Icon(
-                  Icons.favorite,
-                  color: Colors.black,
-                ),
-              ),
-              ListTile(
-                title: const Text("Books"),
-                onTap: () {},
-                leading: const Icon(
-                  Icons.favorite,
-                  color: Colors.black,
-                ),
-              ),
-              ListTile(
-                title: const Text("Movies"),
-                onTap: () {},
-                leading: const Icon(
-                  Icons.favorite,
-                  color: Colors.black,
-                ),
-              ),
-              ListTile(
-                title: const Text("Fashion"),
-                onTap: () {},
-                leading: const Icon(
-                  Icons.favorite,
-                  color: Colors.black,
-                ),
-              ),
-              ListTile(
-                title: const Text("Dining"),
-                onTap: () {},
-                leading: const Icon(
-                  Icons.favorite,
-                  color: Colors.black,
-                ),
-              ),
-            ],
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

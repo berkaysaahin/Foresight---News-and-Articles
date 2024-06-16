@@ -1,5 +1,6 @@
 import "dart:io";
 
+import "package:cloud_firestore/cloud_firestore.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
@@ -8,6 +9,7 @@ import "package:foresight_news_and_articles/core/rectangle_rounded_button.dart";
 import "package:foresight_news_and_articles/core/services/authentication.dart";
 import "package:foresight_news_and_articles/features/home/widgets/side_bar.dart";
 import "package:foresight_news_and_articles/features/profile/pages/signin_page.dart";
+import "package:foresight_news_and_articles/features/profile/widgets/country_picker.dart";
 import "package:foresight_news_and_articles/theme/app_colors.dart";
 import "package:image_picker/image_picker.dart";
 
@@ -41,6 +43,30 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         );
       });
+    } else {
+      try {
+        // Fetch additional user details from Firestore
+        DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(_user!.uid)
+            .get();
+
+        // Update _user with Firestore data
+        if (userSnapshot.exists) {
+          _user = _auth.currentUser!;
+          userCountry = userSnapshot.get('country') ?? '';
+          username = userSnapshot.get('name') ?? '';
+          email = userSnapshot.get('email') ??
+              ''; // Update _user with the latest Firebase user data
+          setState(() {});
+        } else {
+          print('User document does not exist in Firestore.');
+          // Handle case where user document doesn't exist
+        }
+      } catch (e) {
+        print('Failed to fetch user details: $e');
+        // Handle error fetching user details
+      }
     }
     setState(() {});
   }
@@ -98,6 +124,43 @@ class _ProfilePageState extends State<ProfilePage> {
     setState(() {
       _user = null;
     });
+  }
+
+  String userCountry = '';
+  String username = '';
+  String email = '';
+
+  void _showCountryPicker() async {
+    final selectedCountry = await showDialog<String>(
+      context: context,
+      builder: (BuildContext context) {
+        return CountryPicker(
+          initialCountry: userCountry,
+          onCountrySelected: (country) async {
+            try {
+              // Call AuthService().updateCountry to update Firestore
+              await AuthService().updateCountry(_user!.uid, country);
+              setState(() {
+                userCountry = country;
+              });
+            } catch (e) {
+              print('Failed to update country: $e');
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Failed to update country. Please try again.'),
+                ),
+              );
+            }
+          },
+        );
+      },
+    );
+
+    if (selectedCountry != null) {
+      setState(() {
+        userCountry = selectedCountry;
+      });
+    }
   }
 
   @override
@@ -241,8 +304,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                         // Call the changeUsername method with the new username
                                         AuthService()
                                             .updateUsername(uid, newUsername);
-
-                                        setState(() {});
+                                        setState(() {
+                                          username = newUsername;
+                                        });
 
                                         Navigator.pop(context);
 
@@ -259,9 +323,8 @@ class _ProfilePageState extends State<ProfilePage> {
                             "Name",
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          subtitle: _user != null
-                              ? Text(_user!.displayName ?? 'No name found')
-                              : const Text(''),
+                          subtitle:
+                              _user != null ? Text(username) : const Text(''),
                           trailing:
                               const Icon(Icons.edit, color: AppColors.osloGray),
                         ),
@@ -291,6 +354,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     actions: <Widget>[
                                       TextButton(
                                         onPressed: () {
+                                          textEditingController.clear();
                                           Navigator.pop(
                                               context); // Close the dialog
                                         },
@@ -309,6 +373,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                           // Call the changeUsername method with the new username
                                           AuthService()
                                               .updateEmail(uid, newEmail);
+                                          setState(() {
+                                            email = newEmail;
+                                          });
 
                                           Navigator.pop(context);
 
@@ -328,9 +395,8 @@ class _ProfilePageState extends State<ProfilePage> {
                             "Email",
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          subtitle: _user != null
-                              ? Text(_user!.email ?? 'No email found')
-                              : const Text(''),
+                          subtitle:
+                              _user != null ? Text(email) : const Text(''),
                           trailing:
                               const Icon(Icons.edit, color: AppColors.osloGray),
                         ),
@@ -339,30 +405,92 @@ class _ProfilePageState extends State<ProfilePage> {
                           color: AppColors.porcelain,
                           thickness: 3,
                         ),
-                        const ListTile(
-                          title: Text(
+                        ListTile(
+                          title: const Text(
                             "Password",
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          subtitle: Text(
+                          subtitle: const Text(
                             "",
                           ),
-                          trailing: Icon(Icons.edit, color: AppColors.osloGray),
+                          trailing:
+                              const Icon(Icons.edit, color: AppColors.osloGray),
+                          onTap: () {
+                            try {
+                              String currentPassword = '';
+                              TextEditingController textEditingController =
+                                  TextEditingController(text: currentPassword);
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: const Text('Edit Password'),
+                                    content: TextField(
+                                      controller: textEditingController,
+                                      decoration: const InputDecoration(
+                                        hintText: 'Enter your new password',
+                                      ),
+                                    ),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        onPressed: () {
+                                          textEditingController.clear();
+                                          Navigator.pop(
+                                              context); // Close the dialog
+                                        },
+                                        child: const Text('Cancel'),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          // Get the new username from the text field
+                                          String newPassword =
+                                              textEditingController.text;
+
+                                          // Get the UID of the current user
+                                          String uid = FirebaseAuth
+                                              .instance.currentUser!.uid;
+
+                                          // Call the changeUsername method with the new username
+                                          AuthService()
+                                              .updatePassword(uid, newPassword);
+
+                                          Navigator.pop(context);
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            const SnackBar(
+                                              content: Text(
+                                                  'Your password has been changed.'),
+                                            ),
+                                          );
+                                          // Close the dialog
+                                        },
+                                        child: const Text('Save'),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            } catch (e) {
+                              print("error");
+                            }
+                          },
                         ),
                         const Divider(
                           height: 40,
                           color: AppColors.porcelain,
                           thickness: 3,
                         ),
-                        const ListTile(
-                          title: Text(
+                        ListTile(
+                          title: const Text(
                             "Country/Region",
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          subtitle: Text(
-                            "",
-                          ),
-                          trailing: Icon(Icons.edit, color: AppColors.osloGray),
+                          subtitle: _user != null
+                              ? Text(userCountry)
+                              : const Text(''),
+                          trailing:
+                              const Icon(Icons.edit, color: AppColors.osloGray),
+                          onTap: _showCountryPicker,
                         ),
                         const Spacer(),
                         Padding(

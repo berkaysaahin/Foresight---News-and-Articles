@@ -42,7 +42,7 @@ class _MainPageState extends State<MainPage> {
           const HomePage(),
           NewArticlePage(),
           const BookMarks(),
-          ProfilePage(),
+          const ProfilePage(),
         ],
       ),
       bottomNavigationBar: Padding(

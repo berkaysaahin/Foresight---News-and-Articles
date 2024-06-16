@@ -1,17 +1,20 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class AuthService {
   final FirebaseStorage _storage = FirebaseStorage.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future<String?> registration({
     required String email,
     required String password,
     required String name,
     required File photo,
+    String? country,
   }) async {
     try {
       UserCredential userCredential =
@@ -23,6 +26,13 @@ class AuthService {
           await uploadProfilePicture(userCredential.user!.uid, photo);
       await userCredential.user
           ?.updateProfile(displayName: name, photoURL: photoURL);
+      await _firestore.collection('users').doc(userCredential.user!.uid).set({
+        'name': name,
+        'email': email,
+        'photoURL': photoURL,
+        'country': country,
+        // Add more fields as needed
+      });
 
       // Reload the user to get the updated info
       await userCredential.user?.reload();
@@ -80,7 +90,10 @@ class AuthService {
       User? user = _auth.currentUser;
       if (user != null) {
         await user.updateDisplayName(username);
-        await user.reload(); // Ensure user data is reloaded
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(uid)
+            .update({'name': username}); // Ensure user data is reloaded
       } else {
         throw Exception('User is not signed in.');
       }
@@ -89,17 +102,48 @@ class AuthService {
     }
   }
 
-  Future<void> updateEmail(String uid, String email) async {
+  Future<void> updatePassword(String uid, String password) async {
     try {
       User? user = _auth.currentUser;
       if (user != null) {
-        await user.updateEmail(email);
+        await user.updatePassword(password);
         await user.reload(); // Ensure user data is reloaded
       } else {
         throw Exception('User is not signed in.');
       }
     } catch (e) {
+      throw Exception('Failed to update password: $e');
+    }
+  }
+
+  Future<void> updateEmail(String uid, String email) async {
+    try {
+      User? user = _auth.currentUser;
+      if (user != null) {
+        await user.updateEmail(email);
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(uid)
+            .update({'email': email});
+        ; // Ensure user data is reloaded
+      } else {
+        throw Exception('User is not signed in.');
+      }
+    } catch (e) {
       throw Exception('Failed to update email: $e');
+    }
+  }
+
+  Future<void> updateCountry(String uid, String country) async {
+    try {
+      // Update Firestore with the new country
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .update({'country': country});
+    } catch (e) {
+      print('Failed to update country: $e');
+      throw Exception('Failed to update country: $e');
     }
   }
 }

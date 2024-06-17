@@ -34,40 +34,31 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<void> _getUserInfo() async {
     _user = _auth.currentUser;
-    if (_user == null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const SignInPage(),
-          ),
-        );
-      });
-    } else {
-      try {
-        // Fetch additional user details from Firestore
-        DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
-            .collection('users')
-            .doc(_user!.uid)
-            .get();
 
-        // Update _user with Firestore data
-        if (userSnapshot.exists) {
-          _user = _auth.currentUser!;
-          userCountry = userSnapshot.get('country') ?? '';
-          username = userSnapshot.get('name') ?? '';
-          email = userSnapshot.get('email') ??
-              ''; // Update _user with the latest Firebase user data
-          setState(() {});
-        } else {
-          print('User document does not exist in Firestore.');
-          // Handle case where user document doesn't exist
-        }
-      } catch (e) {
-        print('Failed to fetch user details: $e');
-        // Handle error fetching user details
+    try {
+      // Fetch additional user details from Firestore
+      DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(_user!.uid)
+          .get();
+
+      // Update _user with Firestore data
+      if (userSnapshot.exists) {
+        _user = _auth.currentUser!;
+        userCountry = userSnapshot.get('country') ?? '';
+        username = userSnapshot.get('name') ?? '';
+        email = userSnapshot.get('email') ??
+            ''; // Update _user with the latest Firebase user data
+        setState(() {});
+      } else {
+        print('User document does not exist in Firestore.');
+        // Handle case where user document doesn't exist
       }
+    } catch (e) {
+      print('Failed to fetch user details: $e');
+      // Handle error fetching user details
     }
+
     setState(() {});
   }
 
@@ -145,11 +136,14 @@ class _ProfilePageState extends State<ProfilePage> {
               });
             } catch (e) {
               print('Failed to update country: $e');
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Failed to update country. Please try again.'),
-                ),
-              );
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content:
+                        Text('Failed to update country. Please try again.'),
+                  ),
+                );
+              }
             }
           },
         );
@@ -410,9 +404,9 @@ class _ProfilePageState extends State<ProfilePage> {
                             "Password",
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          subtitle: const Text(
-                            "",
-                          ),
+                          subtitle: _user == null
+                              ? const Text('')
+                              : const Text('•••••••••••••'),
                           trailing:
                               const Icon(Icons.edit, color: AppColors.osloGray),
                           onTap: () {
@@ -496,22 +490,37 @@ class _ProfilePageState extends State<ProfilePage> {
                         Padding(
                           padding: const EdgeInsets.all(10.0),
                           child: Center(
-                            child: RectangleRoundedButton(
-                              onTap: () async {
-                                await _signOut();
-                                if (_user == null) {
-                                  // Optionally show a dialog or snackbar
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content:
-                                          Text('You have been signed out.'),
-                                    ),
-                                  );
-                                }
-                              },
-                              buttonText: "Sign Out",
-                              buttonColor: AppColors.athenasGray,
-                            ),
+                            child: _user == null
+                                ? RectangleRoundedButton(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const SignInPage(),
+                                        ),
+                                      );
+                                    },
+                                    buttonText: "Sign in",
+                                    buttonColor: AppColors.athenasGray,
+                                  )
+                                : RectangleRoundedButton(
+                                    onTap: () async {
+                                      await _signOut();
+                                      if (_user == null && context.mounted) {
+                                        // Optionally show a dialog or snackbar
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                            content: Text(
+                                                'You have been signed out.'),
+                                          ),
+                                        );
+                                      }
+                                    },
+                                    buttonText: "Sign Out",
+                                    buttonColor: AppColors.athenasGray,
+                                  ),
                           ),
                         ),
                       ],

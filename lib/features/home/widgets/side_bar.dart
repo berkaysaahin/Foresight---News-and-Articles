@@ -29,166 +29,172 @@ class _SideBarState extends State<SideBar> {
           bottomRight: Radius.circular(0),
         ),
       ),
-      child: Expanded(
-        child: ListView(
-          children: [
-            UserAccountsDrawerHeader(
-              accountName: Text(
-                user != null ? user!.displayName ?? "" : "",
-                style: const TextStyle(color: AppColors.black),
-              ),
-              accountEmail: Text(
-                user != null ? user!.email ?? "" : "",
-                style: const TextStyle(color: AppColors.black08),
-              ),
-              currentAccountPicture: CircleAvatar(
-                backgroundColor: AppColors.white,
-                child: ClipOval(
-                  child: user != null && user!.photoURL != null
-                      ? Image.network(
-                          user!.photoURL!,
-                          width: 65,
-                          height: 65,
-                          fit: BoxFit.cover,
-                        )
-                      : const Icon(
-                          Icons.person,
-                          size: 55,
-                          color: AppColors.porcelain,
-                        ),
-                ),
-              ),
-              decoration: const BoxDecoration(
-                color: AppColors.athenasGray,
-                border: Border(
-                    bottom: BorderSide(color: Colors.transparent, width: 0.0)),
+      child: Column(
+        children: [
+          UserAccountsDrawerHeader(
+            accountName: Text(
+              user != null ? user!.displayName ?? "" : "",
+              style: const TextStyle(color: AppColors.black),
+            ),
+            accountEmail: Text(
+              user != null ? user!.email ?? "" : "",
+              style: const TextStyle(color: AppColors.black08),
+            ),
+            currentAccountPicture: CircleAvatar(
+              backgroundColor: AppColors.white,
+              child: ClipOval(
+                child: user != null && user!.photoURL != null
+                    ? Image.network(
+                        user!.photoURL!,
+                        width: 65,
+                        height: 65,
+                        fit: BoxFit.cover,
+                      )
+                    : const Icon(
+                        Icons.person,
+                        size: 55,
+                        color: AppColors.porcelain,
+                      ),
               ),
             ),
-            ListTile(
-              title: Text(
-                "All",
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AllNewsPage(
-                      newsItems: [],
-                    ),
-                  ),
-                );
-              },
-              trailing: const Icon(
-                Icons.arrow_forward_ios_sharp,
-                size: 16,
-                color: AppColors.osloGray,
-              ),
+            decoration: const BoxDecoration(
+              color: AppColors.athenasGray,
+              border: Border(
+                  bottom: BorderSide(color: Colors.transparent, width: 0.0)),
             ),
-            ListTile(
-              title: Text(
-                "News",
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-              onTap: () {},
-              trailing: const Icon(
-                Icons.arrow_forward_ios_sharp,
-                size: 16,
-                color: AppColors.osloGray,
-              ),
-            ),
-            ListTile(
-              title: const Text("Articles"),
-              onTap: () {},
-              trailing: const Icon(
-                Icons.arrow_forward_ios_sharp,
-                size: 16,
-                color: AppColors.osloGray,
-              ),
-            ),
-            ExpansionTile(
-              collapsedShape: const RoundedRectangleBorder(
-                side: BorderSide.none,
-              ),
-              shape: const RoundedRectangleBorder(
-                side: BorderSide.none,
-              ),
-              title: Text(
-                "Categories",
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
+          ),
+          Expanded(
+            child: ListView(
+              padding: EdgeInsets.zero,
               children: [
                 ListTile(
-                  title: const Text("Business"),
-                  onTap: () {},
+                  title: Text(
+                    "All",
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AllNewsPage(
+                          newsItems: [],
+                        ),
+                      ),
+                    );
+                  },
+                  trailing: const Icon(
+                    Icons.arrow_forward_ios_sharp,
+                    size: 16,
+                    color: AppColors.osloGray,
+                  ),
                 ),
                 ListTile(
-                  title: const Text("Politics"),
+                  title: Text(
+                    "News",
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
                   onTap: () {},
+                  trailing: const Icon(
+                    Icons.arrow_forward_ios_sharp,
+                    size: 16,
+                    color: AppColors.osloGray,
+                  ),
                 ),
                 ListTile(
-                  title: const Text("Science"),
+                  title: const Text("Articles"),
                   onTap: () {},
+                  trailing: const Icon(
+                    Icons.arrow_forward_ios_sharp,
+                    size: 16,
+                    color: AppColors.osloGray,
+                  ),
                 ),
-                ListTile(
-                  title: const Text("Technology"),
-                  onTap: () {},
-                ),
-                ListTile(
-                  title: const Text("Health"),
-                  onTap: () {},
-                ),
-                ListTile(
-                  title: const Text("Education"),
-                  onTap: () {},
-                ),
-                ListTile(
-                  title: const Text("Travel"),
-                  onTap: () {},
-                ),
-                ListTile(
-                  title: const Text("Art"),
-                  onTap: () {},
-                ),
-                ListTile(
-                  title: const Text("Sports"),
-                  onTap: () {},
-                ),
-                ListTile(
-                  title: const Text("Books"),
-                  onTap: () {},
-                ),
-                ListTile(
-                  title: const Text("Movies"),
-                  onTap: () {},
-                ),
-                ListTile(
-                  title: const Text("Fashion"),
-                  onTap: () {},
-                ),
-                ListTile(
-                  title: const Text("Dining"),
-                  onTap: () {},
+                ExpansionTile(
+                  collapsedShape: const RoundedRectangleBorder(
+                    side: BorderSide.none,
+                  ),
+                  shape: const RoundedRectangleBorder(
+                    side: BorderSide.none,
+                  ),
+                  title: Text(
+                    "Categories",
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                  children: [
+                    ListTile(
+                      title: const Text("Business"),
+                      onTap: () {},
+                    ),
+                    ListTile(
+                      title: const Text("Politics"),
+                      onTap: () {},
+                    ),
+                    ListTile(
+                      title: const Text("Science"),
+                      onTap: () {},
+                    ),
+                    ListTile(
+                      title: const Text("Technology"),
+                      onTap: () {},
+                    ),
+                    ListTile(
+                      title: const Text("Health"),
+                      onTap: () {},
+                    ),
+                    ListTile(
+                      title: const Text("Education"),
+                      onTap: () {},
+                    ),
+                    ListTile(
+                      title: const Text("Travel"),
+                      onTap: () {},
+                    ),
+                    ListTile(
+                      title: const Text("Art"),
+                      onTap: () {},
+                    ),
+                    ListTile(
+                      title: const Text("Sports"),
+                      onTap: () {},
+                    ),
+                    ListTile(
+                      title: const Text("Books"),
+                      onTap: () {},
+                    ),
+                    ListTile(
+                      title: const Text("Movies"),
+                      onTap: () {},
+                    ),
+                    ListTile(
+                      title: const Text("Fashion"),
+                      onTap: () {},
+                    ),
+                    ListTile(
+                      title: const Text("Dining"),
+                      onTap: () {},
+                    ),
+                  ],
                 ),
               ],
             ),
-            const Spacer(),
-            ListTile(
-              title: const Text("Sign Out"),
-              onTap: () async {
-                await _signOut();
-                if (user == null) {
-                  // Optionally show a dialog or snackbar
+          ),
+          ListTile(
+            title: const Text("Sign Out"),
+            onTap: () async {
+              await _signOut();
+              if (user == null) {
+                // Optionally show a dialog or snackbar
+                if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text('You have been signed out.'),
                     ),
                   );
                 }
-              },
-            ),
-          ],
-        ),
+              }
+            },
+          ),
+        ],
       ),
     );
   }

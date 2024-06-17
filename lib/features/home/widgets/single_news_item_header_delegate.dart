@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -66,9 +67,17 @@ class SingleNewsItemHeaderDelegate extends SliverPersistentHeaderDelegate {
           bottom: -10,
           left: 0,
           right: 0,
-          child: Image.network(
-            imageAssetPath,
+          child: CachedNetworkImage(
+            imageUrl: imageAssetPath,
             fit: BoxFit.cover,
+            placeholder: (context, url) => const Center(
+              child: SizedBox(
+                width: 20.0, // Adjust width for desired size
+                height: 20.0, // Adjust height for desired size
+                child: CircularProgressIndicator(),
+              ),
+            ),
+            errorWidget: (context, url, error) => const Icon(Icons.error),
           ),
         ),
         Positioned(

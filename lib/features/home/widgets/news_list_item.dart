@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:foresight_news_and_articles/features/browse/pages/single_news_item_page.dart';
 import 'package:foresight_news_and_articles/theme/app_colors.dart';
@@ -45,11 +46,19 @@ class NewsListItem extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(20),
-              child: Image.network(
-                imageAssetPath,
+              child: CachedNetworkImage(
+                imageUrl: imageAssetPath, // Replace with your image URL field
                 width: 150,
                 height: 150,
                 fit: BoxFit.cover,
+                placeholder: (context, url) => const Center(
+                  child: SizedBox(
+                    width: 20.0, // Adjust width for desired size
+                    height: 20.0, // Adjust height for desired size
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
               ),
             ),
             const SizedBox(
@@ -79,8 +88,8 @@ class NewsListItem extends StatelessWidget {
                   Row(
                     children: [
                       CircleAvatar(
-                        backgroundImage: NetworkImage(
-                          authorImageAssetPath,
+                        backgroundImage: CachedNetworkImageProvider(
+                          authorImageAssetPath, // Replace with your image URL field
                         ),
                         radius: 15,
                       ),

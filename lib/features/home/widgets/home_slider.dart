@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:foresight_news_and_articles/core/models/news_model.dart';
 import 'package:foresight_news_and_articles/features/home/widgets/home_slider_indicator_item.dart';
 import 'package:foresight_news_and_articles/features/home/widgets/home_slider_item.dart';
 
 class HomeSlider extends StatefulWidget {
-  final List<Map<String, dynamic>> newsItems;
+  final List<News> newsItems;
   const HomeSlider({super.key, required this.newsItems});
 
   @override
@@ -81,16 +82,16 @@ class _HomeSliderState extends State<HomeSlider> {
               controller: _pageController,
               itemBuilder: (context, index) {
                 final i = index % widget.newsItems.length;
+                final newsItem = widget.newsItems[i];
                 return HomeSliderItem(
                   isActive: _pageIndex == i,
-                  imageAssetPath: widget.newsItems[i]['imageAssetPath']!,
-                  authorImageAssetPath: widget.newsItems[i]
-                      ['authorImageAssetPath']!,
-                  category: widget.newsItems[i]['category']!,
-                  title: widget.newsItems[i]['title']!,
-                  content: widget.newsItems[i]['content']!,
-                  author: widget.newsItems[i]['author']!,
-                  date: widget.newsItems[i]['date']!,
+                  imageAssetPath: newsItem.imageAssetPath,
+                  authorImageAssetPath: newsItem.authorImageAssetPath,
+                  category: newsItem.category,
+                  title: newsItem.title,
+                  content: newsItem.content,
+                  author: newsItem.author,
+                  date: newsItem.date,
                 );
               },
             ),

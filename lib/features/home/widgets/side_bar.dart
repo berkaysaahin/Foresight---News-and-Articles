@@ -178,22 +178,24 @@ class _SideBarState extends State<SideBar> {
               ],
             ),
           ),
-          ListTile(
-            title: const Text("Sign Out"),
-            onTap: () async {
-              await _signOut();
-              if (user == null) {
-                // Optionally show a dialog or snackbar
-                if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('You have been signed out.'),
-                    ),
-                  );
-                }
-              }
-            },
-          ),
+          user == null
+              ? const SizedBox()
+              : ListTile(
+                  title: const Text("Sign Out"),
+                  onTap: () async {
+                    await _signOut();
+                    if (user == null) {
+                      // Optionally show a dialog or snackbar
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('You have been signed out.'),
+                          ),
+                        );
+                      }
+                    }
+                  },
+                ),
         ],
       ),
     );

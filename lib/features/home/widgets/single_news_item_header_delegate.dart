@@ -12,6 +12,8 @@ class SingleNewsItemHeaderDelegate extends SliverPersistentHeaderDelegate {
   final String imageAssetPath;
   final String date;
   final double topPadding;
+  final bool isBookmarked;
+  final VoidCallback onBookmarkToggle;
 
   final Function(double value) borderRadiusAnimationValue;
 
@@ -29,6 +31,8 @@ class SingleNewsItemHeaderDelegate extends SliverPersistentHeaderDelegate {
     required this.imageAssetPath,
     required this.date,
     required this.topPadding,
+    required this.isBookmarked,
+    required this.onBookmarkToggle,
   });
 
   @override
@@ -216,8 +220,10 @@ class SingleNewsItemHeaderDelegate extends SliverPersistentHeaderDelegate {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             AppRoundedButtonBlur(
-                              iconData: CupertinoIcons.bookmark,
-                              onTap: () {},
+                              iconData: isBookmarked
+                                  ? CupertinoIcons.bookmark_fill
+                                  : CupertinoIcons.bookmark,
+                              onTap: onBookmarkToggle,
                             ),
                             const SizedBox(
                               width: 10,

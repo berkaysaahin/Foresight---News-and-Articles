@@ -1,27 +1,13 @@
-import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:foresight_news_and_articles/core/models/news_model.dart';
 
-class NewsService with ChangeNotifier {
-  List<Map<String, dynamic>> _newsItems = [];
+class NewsService {
+  final CollectionReference _newsCollection =
+      FirebaseFirestore.instance.collection('news');
 
-  List<Map<String, dynamic>> get newsItems => _newsItems;
-
-  void setNewsItems(List<Map<String, dynamic>> newsItems) {
-    _newsItems = newsItems;
-    notifyListeners();
-  }
-
-  void addNewsItem(Map<String, dynamic> newsItem) {
-    _newsItems.add(newsItem);
-    notifyListeners();
-  }
-
-  void updateNewsItem(int index, Map<String, dynamic> newsItem) {
-    _newsItems[index] = newsItem;
-    notifyListeners();
-  }
-
-  void removeNewsItem(int index) {
-    _newsItems.removeAt(index);
-    notifyListeners();
+  Stream<List<News>> getNewsStream() {
+    return _newsCollection.snapshots().map((snapshot) {
+      return snapshot.docs.map((doc) => News.fromFirestore(doc)).toList();
+    });
   }
 }

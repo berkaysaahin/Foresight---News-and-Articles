@@ -227,7 +227,8 @@ class _NewArticlePageState extends State<NewArticlePage> {
                                 "date": formattedDate,
                                 "imageAsset": imageUrl,
                                 "author": _currentUser?.displayName,
-                                "authorImage": _currentUser?.photoURL
+                                "authorImage": _currentUser?.photoURL,
+                                "isBookmarked": false,
                                 // URL of the uploaded image
                               });
 
@@ -377,6 +378,9 @@ class _NewArticlePageState extends State<NewArticlePage> {
                     'Movies',
                     'Fashion',
                     'Dining',
+                    'World',
+                    'History',
+                    'Crime',
                   ].map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,

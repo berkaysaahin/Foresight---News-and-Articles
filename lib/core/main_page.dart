@@ -41,7 +41,7 @@ class _MainPageState extends State<MainPage> {
         children: [
           const HomePage(),
           NewArticlePage(),
-          const BookMarks(),
+          BookMarks(),
           const ProfilePage(),
         ],
       ),

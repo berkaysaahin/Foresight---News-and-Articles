@@ -26,6 +26,14 @@ class SingleNewsItemPage extends StatefulWidget {
 
 class _SingleNewsItemPageState extends State<SingleNewsItemPage> {
   double _borderRadiusMultiplier = 1;
+  bool isBookmarked = false;
+
+  void toggleBookmark() {
+    setState(() {
+      isBookmarked = !isBookmarked;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final topPadding = MediaQuery.of(context).padding.top;
@@ -44,6 +52,8 @@ class _SingleNewsItemPageState extends State<SingleNewsItemPage> {
                   });
                 });
               },
+              isBookmarked: isBookmarked,
+              onBookmarkToggle: toggleBookmark,
               title: widget.title,
               category: widget.category,
               date: widget.date,

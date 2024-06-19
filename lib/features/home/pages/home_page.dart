@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:foresight_news_and_articles/core/models/news_model.dart';
+import 'package:foresight_news_and_articles/core/services/news_service.dart';
 import 'package:foresight_news_and_articles/features/home/pages/all_news_page.dart';
 import 'package:foresight_news_and_articles/features/home/widgets/home_heading.dart';
 import 'package:foresight_news_and_articles/features/home/widgets/home_slider.dart';
@@ -16,7 +18,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Map<String, dynamic>> _newsItems = [];
+  final NewsService _newsService = NewsService();
+  List<News> _newsItems = [];
   String _searchText = '';
   void updateSearchResults(String query) {
     // Update UI in HomePage based on the search query
@@ -25,35 +28,36 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  void toggleBookmark(News newsItem) {
+    setState(() {
+      newsItem.isBookmarked = !newsItem.isBookmarked;
+      // Optionally, update the Firestore document with the new bookmark status
+      FirebaseFirestore.instance
+          .collection('news')
+          .doc(newsItem.title)
+          .update(newsItem.toJson());
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: const SideBar(),
       body: SafeArea(
-        child: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance.collection('news').snapshots(),
+        child: StreamBuilder<List<News>>(
+          stream: _newsService.getNewsStream(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
+              print('Error: ${snapshot.error}');
               return const Center(child: Text('Error occurred'));
-            } else if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
-              _newsItems = snapshot.data!.docs.map((doc) {
-                return {
-                  'imageAssetPath': doc['imageAsset'],
-                  'category': doc['category'],
-                  'title': doc['title'],
-                  'content': doc['content'],
-                  'author': doc['author'],
-                  'authorImageAssetPath': doc['authorImage'],
-                  'date': doc['date'],
-                };
-              }).toList();
-              List<Map<String, dynamic>> filteredNewsItems = _searchText.isEmpty
+            } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+              _newsItems = snapshot.data!;
+              List<News> filteredNewsItems = _searchText.isEmpty
                   ? _newsItems
                   : _newsItems.where((newsItem) {
-                      // Filter based on search query
-                      return newsItem['title']
+                      return newsItem.title
                           .toLowerCase()
                           .contains(_searchText.toLowerCase());
                     }).toList();

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:foresight_news_and_articles/core/models/news_model.dart';
 import 'package:foresight_news_and_articles/features/home/widgets/news_list_item.dart';
 
 class NewsList extends StatefulWidget {
-  final List<Map<String, dynamic>> newsItems;
+  final List<News> newsItems;
   const NewsList({Key? key, required this.newsItems}) : super(key: key);
 
   @override
@@ -14,15 +15,18 @@ class _NewsListState extends State<NewsList> {
   Widget build(BuildContext context) {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
-        (context, i) => NewsListItem(
-          imageAssetPath: widget.newsItems[i]['imageAssetPath']!,
-          authorImageAssetPath: widget.newsItems[i]['authorImageAssetPath']!,
-          category: widget.newsItems[i]['category']!,
-          title: widget.newsItems[i]['title']!,
-          content: widget.newsItems[i]['content']!,
-          author: widget.newsItems[i]['author']!,
-          date: widget.newsItems[i]['date']!,
-        ),
+        (context, index) {
+          final News newsItem = widget.newsItems[index];
+          return NewsListItem(
+            imageAssetPath: newsItem.imageAssetPath,
+            authorImageAssetPath: newsItem.authorImageAssetPath,
+            category: newsItem.category,
+            title: newsItem.title,
+            content: newsItem.content,
+            author: newsItem.author,
+            date: newsItem.date,
+          );
+        },
         childCount: widget.newsItems.length,
       ),
     );

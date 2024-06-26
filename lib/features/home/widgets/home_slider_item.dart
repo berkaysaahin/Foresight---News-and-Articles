@@ -11,6 +11,7 @@ class HomeSliderItem extends StatelessWidget {
   final String author;
   final String date;
   final String authorImageAssetPath;
+  final bool isBookmarked;
   const HomeSliderItem(
       {super.key,
       required this.isActive,
@@ -20,7 +21,8 @@ class HomeSliderItem extends StatelessWidget {
       required this.author,
       required this.date,
       required this.content,
-      required this.authorImageAssetPath});
+      required this.authorImageAssetPath,
+      required this.isBookmarked});
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +39,7 @@ class HomeSliderItem extends StatelessWidget {
               authorImageAssetPath: authorImageAssetPath,
               imageAssetPath: imageAssetPath,
               date: date,
+              isBookmarked: isBookmarked,
             ),
           ),
         );

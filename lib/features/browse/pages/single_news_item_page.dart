@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:foresight_news_and_articles/features/home/widgets/single_news_item_header_delegate.dart';
 import 'package:foresight_news_and_articles/theme/app_colors.dart';
@@ -10,6 +12,7 @@ class SingleNewsItemPage extends StatefulWidget {
   final String authorImageAssetPath;
   final String imageAssetPath;
   final String date;
+  final bool isBookmarked;
   const SingleNewsItemPage(
       {super.key,
       required this.title,
@@ -18,7 +21,8 @@ class SingleNewsItemPage extends StatefulWidget {
       required this.category,
       required this.authorImageAssetPath,
       required this.imageAssetPath,
-      required this.date});
+      required this.date,
+      required this.isBookmarked});
 
   @override
   State<SingleNewsItemPage> createState() => _SingleNewsItemPageState();
@@ -27,11 +31,70 @@ class SingleNewsItemPage extends StatefulWidget {
 class _SingleNewsItemPageState extends State<SingleNewsItemPage> {
   double _borderRadiusMultiplier = 1;
   bool isBookmarked = false;
+  String? bookmarkId;
 
-  void toggleBookmark() {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final User? user = FirebaseAuth.instance.currentUser;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize local isBookmarked state from passed data
+    isBookmarked = widget.isBookmarked;
+    _getBookmarkId(); // Get the bookmark ID if it exists
+  }
+
+  Future<void> _getBookmarkId() async {
+    if (user != null) {
+      try {
+        QuerySnapshot querySnapshot = await _firestore
+            .collection('bookmarks')
+            .where('newsId', isEqualTo: widget.title)
+            .where('userId', isEqualTo: user!.uid)
+            .get();
+
+        if (querySnapshot.docs.isNotEmpty) {
+          setState(() {
+            bookmarkId = querySnapshot.docs.first.id;
+            isBookmarked = true;
+          });
+        }
+      } catch (e) {
+        print("Error getting bookmark ID: $e");
+      }
+    }
+  }
+
+  void toggleBookmark() async {
     setState(() {
       isBookmarked = !isBookmarked;
     });
+    if (user != null) {
+      try {
+        if (isBookmarked) {
+          DocumentReference bookmarkRef =
+              _firestore.collection('bookmarks').doc();
+          bookmarkId = bookmarkRef.id;
+          await bookmarkRef.set({
+            'newsId': widget.title,
+            'userId': user!.uid,
+            'title': widget.title,
+            'author': widget.author,
+            'category': widget.category,
+            'isBookmarked': true,
+            'imageAsset': widget.imageAssetPath,
+            'content': widget.content,
+            'date': widget.date,
+            'authorImage': widget.authorImageAssetPath,
+          });
+        } else if (bookmarkId != null) {
+          await _firestore.collection('bookmarks').doc(bookmarkId).delete();
+          bookmarkId = null;
+        }
+      } catch (e) {
+        print("Error updating bookmark: $e");
+      }
+    }
   }
 
   @override
@@ -69,7 +132,7 @@ class _SingleNewsItemPageState extends State<SingleNewsItemPage> {
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 borderRadius:
-                    BorderRadius.circular(40 * _borderRadiusMultiplier),
+                    BorderRadius.circular(16 * _borderRadiusMultiplier),
                 color: AppColors.white,
               ),
               duration: const Duration(milliseconds: 200),

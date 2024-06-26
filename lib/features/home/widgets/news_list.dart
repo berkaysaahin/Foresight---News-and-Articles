@@ -25,6 +25,7 @@ class _NewsListState extends State<NewsList> {
             content: newsItem.content,
             author: newsItem.author,
             date: newsItem.date,
+            isBookmarked: newsItem.isBookmarked,
           );
         },
         childCount: widget.newsItems.length,

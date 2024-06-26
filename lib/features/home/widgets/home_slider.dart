@@ -84,15 +84,15 @@ class _HomeSliderState extends State<HomeSlider> {
                 final i = index % widget.newsItems.length;
                 final newsItem = widget.newsItems[i];
                 return HomeSliderItem(
-                  isActive: _pageIndex == i,
-                  imageAssetPath: newsItem.imageAssetPath,
-                  authorImageAssetPath: newsItem.authorImageAssetPath,
-                  category: newsItem.category,
-                  title: newsItem.title,
-                  content: newsItem.content,
-                  author: newsItem.author,
-                  date: newsItem.date,
-                );
+                    isActive: _pageIndex == i,
+                    imageAssetPath: newsItem.imageAssetPath,
+                    authorImageAssetPath: newsItem.authorImageAssetPath,
+                    category: newsItem.category,
+                    title: newsItem.title,
+                    content: newsItem.content,
+                    author: newsItem.author,
+                    date: newsItem.date,
+                    isBookmarked: newsItem.isBookmarked);
               },
             ),
           ),

@@ -11,6 +11,7 @@ class NewsListItem extends StatelessWidget {
   final String authorImageAssetPath;
   final String imageAssetPath;
   final String date;
+  final bool isBookmarked;
   const NewsListItem(
       {super.key,
       required this.title,
@@ -19,7 +20,8 @@ class NewsListItem extends StatelessWidget {
       required this.authorImageAssetPath,
       required this.imageAssetPath,
       required this.date,
-      required this.content});
+      required this.content,
+      required this.isBookmarked});
 
   @override
   Widget build(BuildContext context) {
@@ -29,13 +31,15 @@ class NewsListItem extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => SingleNewsItemPage(
-                title: title,
-                content: content,
-                author: author,
-                category: category,
-                authorImageAssetPath: authorImageAssetPath,
-                imageAssetPath: imageAssetPath,
-                date: date),
+              title: title,
+              content: content,
+              author: author,
+              category: category,
+              authorImageAssetPath: authorImageAssetPath,
+              imageAssetPath: imageAssetPath,
+              date: date,
+              isBookmarked: isBookmarked,
+            ),
           ),
         );
       },

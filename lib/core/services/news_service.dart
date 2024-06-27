@@ -14,6 +14,15 @@ class NewsService {
     });
   }
 
+  Stream<List<News>> getNewsByCategory(String category) {
+    return _newsCollection
+        .where('category', isEqualTo: category)
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.docs.map((doc) => News.fromFirestore(doc)).toList();
+    });
+  }
+
   Stream<List<News>> bookmarkedItemsStream() {
     return _bookmarksCollection
         .where('isBookmarked', isEqualTo: true) // Filter on the server-side

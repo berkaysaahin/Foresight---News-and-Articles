@@ -1,6 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:foresight_news_and_articles/app.dart';
+import 'package:foresight_news_and_articles/core/services/news_service.dart';
+import 'package:provider/provider.dart';
 
 import 'firebase_options.dart';
 
@@ -12,5 +14,14 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  runApp(const App());
+  runApp(
+    MultiProvider(
+      providers: [
+        Provider<NewsService>(
+          create: (_) => NewsService(),
+        ),
+      ],
+      child: const App(),
+    ),
+  );
 }

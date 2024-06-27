@@ -9,6 +9,7 @@ import 'package:foresight_news_and_articles/features/home/widgets/home_top_butto
 import 'package:foresight_news_and_articles/features/home/widgets/news_list.dart';
 import 'package:foresight_news_and_articles/features/home/widgets/side_bar.dart';
 import 'package:foresight_news_and_articles/theme/app_colors.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key});
@@ -18,12 +19,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final NewsService _newsService = NewsService();
   List<News> _newsItems = [];
   String _searchText = '';
   void updateSearchResults(String query) {
     // Update UI in HomePage based on the search query
     setState(() {
+      _searchText = query;
       // Update specific state variables here
     });
   }
@@ -41,11 +42,12 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final newsService = Provider.of<NewsService>(context);
     return Scaffold(
       drawer: const SideBar(),
       body: SafeArea(
         child: StreamBuilder<List<News>>(
-          stream: _newsService.getNewsStream(),
+          stream: newsService.getNewsStream(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());

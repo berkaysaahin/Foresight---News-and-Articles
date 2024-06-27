@@ -1,7 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:foresight_news_and_articles/core/services/news_service.dart';
 import 'package:foresight_news_and_articles/features/home/pages/all_news_page.dart';
+import 'package:foresight_news_and_articles/features/home/pages/category_news_page.dart';
 import 'package:foresight_news_and_articles/theme/app_colors.dart';
+import 'package:provider/provider.dart';
 
 class SideBar extends StatefulWidget {
   const SideBar({super.key});
@@ -18,6 +21,19 @@ class _SideBarState extends State<SideBar> {
     setState(() {
       user = null;
     });
+  }
+
+  void _navigateToCategory(BuildContext context, String category) {
+    final newsService = Provider.of<NewsService>(context, listen: false);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CategoryNewsPage(
+          category: category,
+          newsService: newsService,
+        ),
+      ),
+    );
   }
 
   @override
@@ -123,55 +139,55 @@ class _SideBarState extends State<SideBar> {
                   children: [
                     ListTile(
                       title: const Text("Business"),
-                      onTap: () {},
+                      onTap: () => _navigateToCategory(context, "Business"),
                     ),
                     ListTile(
                       title: const Text("Politics"),
-                      onTap: () {},
+                      onTap: () => _navigateToCategory(context, "Politics"),
                     ),
                     ListTile(
                       title: const Text("Science"),
-                      onTap: () {},
+                      onTap: () => _navigateToCategory(context, "Science"),
                     ),
                     ListTile(
                       title: const Text("Technology"),
-                      onTap: () {},
+                      onTap: () => _navigateToCategory(context, "Technology"),
                     ),
                     ListTile(
                       title: const Text("Health"),
-                      onTap: () {},
+                      onTap: () => _navigateToCategory(context, "Health"),
                     ),
                     ListTile(
                       title: const Text("Education"),
-                      onTap: () {},
+                      onTap: () => _navigateToCategory(context, "Education"),
                     ),
                     ListTile(
                       title: const Text("Travel"),
-                      onTap: () {},
+                      onTap: () => _navigateToCategory(context, "Travel"),
                     ),
                     ListTile(
                       title: const Text("Art"),
-                      onTap: () {},
+                      onTap: () => _navigateToCategory(context, "Art"),
                     ),
                     ListTile(
                       title: const Text("Sports"),
-                      onTap: () {},
+                      onTap: () => _navigateToCategory(context, "Sports"),
                     ),
                     ListTile(
                       title: const Text("Books"),
-                      onTap: () {},
+                      onTap: () => _navigateToCategory(context, "Books"),
                     ),
                     ListTile(
                       title: const Text("Movies"),
-                      onTap: () {},
+                      onTap: () => _navigateToCategory(context, "Movies"),
                     ),
                     ListTile(
                       title: const Text("Fashion"),
-                      onTap: () {},
+                      onTap: () => _navigateToCategory(context, "Fashion"),
                     ),
                     ListTile(
                       title: const Text("Dining"),
-                      onTap: () {},
+                      onTap: () => _navigateToCategory(context, "Dining"),
                     ),
                   ],
                 ),

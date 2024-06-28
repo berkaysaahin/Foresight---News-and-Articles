@@ -189,6 +189,14 @@ class _SideBarState extends State<SideBar> {
                       title: const Text("Dining"),
                       onTap: () => _navigateToCategory(context, "Dining"),
                     ),
+                    ListTile(
+                      title: const Text("World"),
+                      onTap: () => _navigateToCategory(context, "World"),
+                    ),
+                    ListTile(
+                      title: const Text("Crime"),
+                      onTap: () => _navigateToCategory(context, "Crime"),
+                    ),
                   ],
                 ),
               ],

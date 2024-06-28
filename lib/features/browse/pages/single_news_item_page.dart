@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:foresight_news_and_articles/core/services/news_service.dart';
 import 'package:foresight_news_and_articles/features/home/widgets/single_news_item_header_delegate.dart';
 import 'package:foresight_news_and_articles/theme/app_colors.dart';
+import 'package:provider/provider.dart';
 
 class SingleNewsItemPage extends StatefulWidget {
   final String title;
@@ -65,6 +67,19 @@ class _SingleNewsItemPageState extends State<SingleNewsItemPage> {
     }
   }
 
+  void deleteNews() async {
+    try {
+      final newsService = Provider.of<NewsService>(context, listen: false);
+      // Assume `newsService` is an instance of `NewsService`
+      await newsService.deleteNews(widget.title);
+      if (context.mounted) {
+        Navigator.pop(context);
+      } // Go back to the previous screen after deletion
+    } catch (e) {
+      print('Failed to delete news item: $e');
+    }
+  }
+
   void toggleBookmark() async {
     setState(() {
       isBookmarked = !isBookmarked;
@@ -124,6 +139,7 @@ class _SingleNewsItemPageState extends State<SingleNewsItemPage> {
               minExtent: topPadding + 56,
               maxExtent: maxScreenSizeHeight / 2,
               topPadding: topPadding,
+              onDelete: deleteNews,
             ),
             pinned: true,
           ),

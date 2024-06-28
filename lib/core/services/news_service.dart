@@ -31,4 +31,21 @@ class NewsService {
       return snapshot.docs.map((doc) => News.fromFirestore(doc)).toList();
     });
   }
+
+  Future<void> deleteNews(String title) async {
+    try {
+      QuerySnapshot querySnapshot =
+          await _newsCollection.where('title', isEqualTo: title).limit(1).get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        String newsId = querySnapshot.docs.first.id;
+        await _newsCollection.doc(newsId).delete();
+      } else {
+        print('No news found with title: $title');
+      }
+    } catch (e) {
+      print('Error deleting news: $e');
+      rethrow; // Re-throw the error for further handling if needed
+    }
+  }
 }

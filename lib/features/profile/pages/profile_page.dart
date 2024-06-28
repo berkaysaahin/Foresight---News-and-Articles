@@ -5,6 +5,7 @@ import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
 import "package:foresight_news_and_articles/core/app_rounded_button.dart";
+import "package:foresight_news_and_articles/core/main_page.dart";
 import "package:foresight_news_and_articles/core/rectangle_rounded_button.dart";
 import "package:foresight_news_and_articles/core/services/authentication.dart";
 import "package:foresight_news_and_articles/features/home/widgets/side_bar.dart";
@@ -115,6 +116,68 @@ class _ProfilePageState extends State<ProfilePage> {
     setState(() {
       _user = null;
     });
+  }
+
+  Future<void> _deleteAccount() async {
+    try {
+      // Get the current user
+      User? user = _auth.currentUser;
+      if (user != null) {
+        // Show confirmation dialog
+        bool confirm = await showDialog<bool>(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: const Text('Delete Account'),
+                  content: const Text(
+                      'Are you sure you want to delete your account? This action cannot be undone.'),
+                  actions: <Widget>[
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(false),
+                      child: const Text('Cancel'),
+                    ),
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(true),
+                      child: const Text('Delete'),
+                    ),
+                  ],
+                );
+              },
+            ) ??
+            false;
+
+        if (confirm) {
+          // Delete the user document from Firestore
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(user.uid)
+              .delete();
+
+          // Delete the user from Firebase Authentication
+          await user.delete();
+
+          // Sign out the user
+          await _auth.signOut();
+
+          // Navigate to the sign-in page or another appropriate page
+          if (context.mounted) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const MainPage()),
+            );
+          }
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Your account has been deleted.')),
+          );
+        }
+      }
+    } catch (e) {
+      print('Failed to delete account: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('Failed to delete account. Please try again.')),
+      );
+    }
   }
 
   String userCountry = '';
@@ -254,101 +317,34 @@ class _ProfilePageState extends State<ProfilePage> {
                         topRight: Radius.circular(40),
                       ),
                     ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        const SizedBox(
-                          height: 40,
-                        ),
-                        ListTile(
-                          onTap: () {
-                            String currentUsername =
-                                _user?.displayName ?? 'No name found';
-                            TextEditingController textEditingController =
-                                TextEditingController(text: currentUsername);
-                            showDialog(
-                              context: context,
-                              builder: (context) {
-                                return AlertDialog(
-                                  title: const Text('Edit Username'),
-                                  content: TextField(
-                                    controller: textEditingController,
-                                    decoration: const InputDecoration(
-                                      hintText: 'Enter your new username',
-                                    ),
-                                  ),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(
-                                            context); // Close the dialog
-                                      },
-                                      child: const Text('Cancel'),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        // Get the new username from the text field
-                                        String newUsername =
-                                            textEditingController.text;
-
-                                        // Get the UID of the current user
-                                        String uid = FirebaseAuth
-                                            .instance.currentUser!.uid;
-
-                                        // Call the changeUsername method with the new username
-                                        AuthService()
-                                            .updateUsername(uid, newUsername);
-                                        setState(() {
-                                          username = newUsername;
-                                        });
-
-                                        Navigator.pop(context);
-
-                                        // Close the dialog
-                                      },
-                                      child: const Text('Save'),
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          },
-                          title: const Text(
-                            "Name",
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          const SizedBox(
+                            height: 20,
                           ),
-                          subtitle:
-                              _user != null ? Text(username) : const Text(''),
-                          trailing:
-                              const Icon(Icons.edit, color: AppColors.osloGray),
-                        ),
-                        const Divider(
-                          height: 40,
-                          color: AppColors.porcelain,
-                          thickness: 3,
-                        ),
-                        ListTile(
-                          onTap: () {
-                            try {
-                              String currentEmail =
-                                  _user?.email ?? 'No email found';
+                          ListTile(
+                            onTap: () {
+                              String currentUsername =
+                                  _user?.displayName ?? 'No name found';
                               TextEditingController textEditingController =
-                                  TextEditingController(text: currentEmail);
+                                  TextEditingController(text: currentUsername);
                               showDialog(
                                 context: context,
                                 builder: (context) {
                                   return AlertDialog(
-                                    title: const Text('Edit email'),
+                                    title: const Text('Edit Username'),
                                     content: TextField(
                                       controller: textEditingController,
                                       decoration: const InputDecoration(
-                                        hintText: 'Enter your new email',
+                                        hintText: 'Enter your new username',
                                       ),
                                     ),
                                     actions: <Widget>[
                                       TextButton(
                                         onPressed: () {
-                                          textEditingController.clear();
                                           Navigator.pop(
                                               context); // Close the dialog
                                         },
@@ -357,7 +353,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                       TextButton(
                                         onPressed: () {
                                           // Get the new username from the text field
-                                          String newEmail =
+                                          String newUsername =
                                               textEditingController.text;
 
                                           // Get the UID of the current user
@@ -366,9 +362,9 @@ class _ProfilePageState extends State<ProfilePage> {
 
                                           // Call the changeUsername method with the new username
                                           AuthService()
-                                              .updateEmail(uid, newEmail);
+                                              .updateUsername(uid, newUsername);
                                           setState(() {
-                                            email = newEmail;
+                                            username = newUsername;
                                           });
 
                                           Navigator.pop(context);
@@ -381,149 +377,236 @@ class _ProfilePageState extends State<ProfilePage> {
                                   );
                                 },
                               );
-                            } catch (e) {
-                              print("error");
-                            }
-                          },
-                          title: const Text(
-                            "Email",
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                            },
+                            title: const Text(
+                              "Name",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            subtitle: _user != null ? Text(username) : null,
+                            trailing: const Icon(Icons.edit,
+                                color: AppColors.osloGray),
                           ),
-                          subtitle:
-                              _user != null ? Text(email) : const Text(''),
-                          trailing:
-                              const Icon(Icons.edit, color: AppColors.osloGray),
-                        ),
-                        const Divider(
-                          height: 40,
-                          color: AppColors.porcelain,
-                          thickness: 3,
-                        ),
-                        ListTile(
-                          title: const Text(
-                            "Password",
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                          const Divider(
+                            height: 20,
+                            color: AppColors.porcelain,
+                            thickness: 3,
                           ),
-                          subtitle: _user == null
-                              ? const Text('')
-                              : const Text('•••••••••••••'),
-                          trailing:
-                              const Icon(Icons.edit, color: AppColors.osloGray),
-                          onTap: () {
-                            try {
-                              String currentPassword = '';
-                              TextEditingController textEditingController =
-                                  TextEditingController(text: currentPassword);
-                              showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return AlertDialog(
-                                    title: const Text('Edit Password'),
-                                    content: TextField(
-                                      controller: textEditingController,
-                                      decoration: const InputDecoration(
-                                        hintText: 'Enter your new password',
+                          ListTile(
+                            onTap: () {
+                              try {
+                                String currentEmail =
+                                    _user?.email ?? 'No email found';
+                                TextEditingController textEditingController =
+                                    TextEditingController(text: currentEmail);
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: const Text('Edit email'),
+                                      content: TextField(
+                                        controller: textEditingController,
+                                        decoration: const InputDecoration(
+                                          hintText: 'Enter your new email',
+                                        ),
                                       ),
-                                    ),
-                                    actions: <Widget>[
-                                      TextButton(
-                                        onPressed: () {
-                                          textEditingController.clear();
-                                          Navigator.pop(
-                                              context); // Close the dialog
-                                        },
-                                        child: const Text('Cancel'),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () {
+                                            textEditingController.clear();
+                                            Navigator.pop(
+                                                context); // Close the dialog
+                                          },
+                                          child: const Text('Cancel'),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            // Get the new username from the text field
+                                            String newEmail =
+                                                textEditingController.text;
+
+                                            // Get the UID of the current user
+                                            String uid = FirebaseAuth
+                                                .instance.currentUser!.uid;
+
+                                            // Call the changeUsername method with the new username
+                                            AuthService()
+                                                .updateEmail(uid, newEmail);
+                                            setState(() {
+                                              email = newEmail;
+                                            });
+
+                                            Navigator.pop(context);
+
+                                            // Close the dialog
+                                          },
+                                          child: const Text('Save'),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              } catch (e) {
+                                print("error");
+                              }
+                            },
+                            title: const Text(
+                              "Email",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            subtitle: _user != null ? Text(email) : null,
+                            trailing: const Icon(Icons.edit,
+                                color: AppColors.osloGray),
+                          ),
+                          const Divider(
+                            height: 20,
+                            color: AppColors.porcelain,
+                            thickness: 3,
+                          ),
+                          ListTile(
+                            title: const Text(
+                              "Password",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            subtitle: _user == null
+                                ? null
+                                : const Text('•••••••••••••'),
+                            trailing: const Icon(Icons.edit,
+                                color: AppColors.osloGray),
+                            onTap: () {
+                              try {
+                                String currentPassword = '';
+                                TextEditingController textEditingController =
+                                    TextEditingController(
+                                        text: currentPassword);
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: const Text('Edit Password'),
+                                      content: TextField(
+                                        controller: textEditingController,
+                                        decoration: const InputDecoration(
+                                          hintText: 'Enter your new password',
+                                        ),
                                       ),
-                                      TextButton(
-                                        onPressed: () {
-                                          // Get the new username from the text field
-                                          String newPassword =
-                                              textEditingController.text;
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () {
+                                            textEditingController.clear();
+                                            Navigator.pop(
+                                                context); // Close the dialog
+                                          },
+                                          child: const Text('Cancel'),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            // Get the new username from the text field
+                                            String newPassword =
+                                                textEditingController.text;
 
-                                          // Get the UID of the current user
-                                          String uid = FirebaseAuth
-                                              .instance.currentUser!.uid;
+                                            // Get the UID of the current user
+                                            String uid = FirebaseAuth
+                                                .instance.currentUser!.uid;
 
-                                          // Call the changeUsername method with the new username
-                                          AuthService()
-                                              .updatePassword(uid, newPassword);
+                                            // Call the changeUsername method with the new username
+                                            AuthService().updatePassword(
+                                                uid, newPassword);
 
-                                          Navigator.pop(context);
+                                            Navigator.pop(context);
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              const SnackBar(
+                                                content: Text(
+                                                    'Your password has been changed.'),
+                                              ),
+                                            );
+                                            // Close the dialog
+                                          },
+                                          child: const Text('Save'),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              } catch (e) {
+                                print("error");
+                              }
+                            },
+                          ),
+                          const Divider(
+                            height: 20,
+                            color: AppColors.porcelain,
+                            thickness: 3,
+                          ),
+                          ListTile(
+                            title: const Text(
+                              "Country/Region",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            subtitle: _user != null ? Text(userCountry) : null,
+                            trailing: const Icon(Icons.edit,
+                                color: AppColors.osloGray),
+                            onTap: _showCountryPicker,
+                          ),
+                          const Divider(
+                            height: 20,
+                            color: AppColors.porcelain,
+                            thickness: 3,
+                          ),
+                          ListTile(
+                            title: const Text(
+                              "Delete Your Account",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            trailing: const Icon(Icons.edit,
+                                color: AppColors.osloGray),
+                            onTap: _deleteAccount,
+                            titleAlignment: ListTileTitleAlignment.center,
+                          ),
+                          const Divider(
+                            height: 20,
+                            color: AppColors.porcelain,
+                            thickness: 3,
+                          ),
+                          const Spacer(),
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Center(
+                              child: _user == null
+                                  ? RectangleRoundedButton(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                const SignInPage(),
+                                          ),
+                                        );
+                                      },
+                                      buttonText: "Sign in",
+                                      buttonColor: AppColors.athenasGray,
+                                    )
+                                  : RectangleRoundedButton(
+                                      onTap: () async {
+                                        await _signOut();
+                                        if (_user == null && context.mounted) {
+                                          // Optionally show a dialog or snackbar
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(
                                             const SnackBar(
                                               content: Text(
-                                                  'Your password has been changed.'),
+                                                  'You have been signed out.'),
                                             ),
                                           );
-                                          // Close the dialog
-                                        },
-                                        child: const Text('Save'),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                            } catch (e) {
-                              print("error");
-                            }
-                          },
-                        ),
-                        const Divider(
-                          height: 40,
-                          color: AppColors.porcelain,
-                          thickness: 3,
-                        ),
-                        ListTile(
-                          title: const Text(
-                            "Country/Region",
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                                        }
+                                      },
+                                      buttonText: "Sign Out",
+                                      buttonColor: AppColors.athenasGray,
+                                    ),
+                            ),
                           ),
-                          subtitle: _user != null
-                              ? Text(userCountry)
-                              : const Text(''),
-                          trailing:
-                              const Icon(Icons.edit, color: AppColors.osloGray),
-                          onTap: _showCountryPicker,
-                        ),
-                        const Spacer(),
-                        Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Center(
-                            child: _user == null
-                                ? RectangleRoundedButton(
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              const SignInPage(),
-                                        ),
-                                      );
-                                    },
-                                    buttonText: "Sign in",
-                                    buttonColor: AppColors.athenasGray,
-                                  )
-                                : RectangleRoundedButton(
-                                    onTap: () async {
-                                      await _signOut();
-                                      if (_user == null && context.mounted) {
-                                        // Optionally show a dialog or snackbar
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          const SnackBar(
-                                            content: Text(
-                                                'You have been signed out.'),
-                                          ),
-                                        );
-                                      }
-                                    },
-                                    buttonText: "Sign Out",
-                                    buttonColor: AppColors.athenasGray,
-                                  ),
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),

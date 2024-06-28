@@ -14,6 +14,7 @@ class SingleNewsItemHeaderDelegate extends SliverPersistentHeaderDelegate {
   final double topPadding;
   final bool isBookmarked;
   final VoidCallback onBookmarkToggle;
+  final VoidCallback onDelete;
 
   final Function(double value) borderRadiusAnimationValue;
 
@@ -33,6 +34,7 @@ class SingleNewsItemHeaderDelegate extends SliverPersistentHeaderDelegate {
     required this.topPadding,
     required this.isBookmarked,
     required this.onBookmarkToggle,
+    required this.onDelete,
   });
 
   @override
@@ -219,6 +221,10 @@ class SingleNewsItemHeaderDelegate extends SliverPersistentHeaderDelegate {
                         firstChild: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
+                            AppRoundedButtonBlur(
+                              iconData: CupertinoIcons.delete_solid,
+                              onTap: onDelete,
+                            ),
                             AppRoundedButtonBlur(
                               iconData: isBookmarked
                                   ? CupertinoIcons.bookmark_fill

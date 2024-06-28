@@ -15,27 +15,28 @@ class CategoryNewsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: StreamBuilder<List<News>>(
-        stream: newsService.getNewsByCategory(category),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return const Center(child: Text('Error occurred'));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('No news available'));
-          }
+      body: CustomScrollView(slivers: [
+        const SecondaryTopButtons(pageTitle: ''),
+        StreamBuilder<List<News>>(
+          stream: newsService.getNewsByCategory(category),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const SliverFillRemaining(
+                  child: Center(child: CircularProgressIndicator()));
+            } else if (snapshot.hasError) {
+              return const SliverFillRemaining(
+                  child: Center(child: Text('Error occurred')));
+            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return const SliverFillRemaining(
+                  child: Center(child: Text('No news available')));
+            }
 
-          final List<News> newsItems = snapshot.data!;
+            final List<News> newsItems = snapshot.data!;
 
-          return CustomScrollView(slivers: [
-            const SecondaryTopButtons(
-              pageTitle: '',
-            ),
-            NewsList(newsItems: newsItems),
-          ]);
-        },
-      ),
+            return NewsList(newsItems: newsItems);
+          },
+        ),
+      ]),
     );
   }
 }
